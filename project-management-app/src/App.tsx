@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Navigation } from './components/Navigation/Navigation';
 import { Main } from 'pages/Main/Main';
-import './App.scss';
+import { BoardList } from 'pages/BoardList/BoardList';
 
 export function App() {
   return (
@@ -11,9 +11,8 @@ export function App() {
       <Navigation />
       <Routes>
         <Route path="/" element={<Main />} />
-        {/* <Route path="/about" element={<About />} />
-        <Route path="/forms" element={<FormsPage />} />
-        <Route path="/card" element={<Modal card={card} />} />
+        <Route path="/board-list" element={<BoardList />} />
+        {/* <Route path="/forms" element={<FormsPage />} />
         <Route path="*" element={<ErrorPage404 />} /> */}
       </Routes>
     </>
