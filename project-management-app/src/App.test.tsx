@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { App } from './App';
 import { Main } from 'pages/Main/Main';
 import { BoardList } from 'pages/BoardList/BoardList';
@@ -15,15 +14,7 @@ describe('Router', () => {
         <App />
       </BrowserRouter>
     );
-    expect(screen.getByText(/my app/i)).toBeInTheDocument();
-  });
-  test('should render loading', () => {
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-    expect(screen.getByTestId(/load-container/i)).toBeInTheDocument();
+    expect(screen.getByText(/Project Management App/i)).toBeInTheDocument();
   });
   test('should render error page if the path is wrong', () => {
     render(
