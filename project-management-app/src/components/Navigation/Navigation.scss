@@ -1,6 +1,11 @@
-#navbarScroll {
-  margin-left: 3rem;
-  .nav__container {
-    gap: 1.2rem;
+.header__navbar {
+  transition: background .7s;
+  background-color: var(--header-bg);
+  .navbar__link {
+    font-weight: 500;
   }
+}
+
+.navbar-scroll {
+  background-color: var(--header-dark-bg);
 }

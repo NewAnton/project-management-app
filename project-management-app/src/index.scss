@@ -5,7 +5,9 @@
   --main-txt-bg: #abb6c7c3;
   --secondary-color: rgba(255, 255, 255, 0.35);
   --text-color: #ffffff;
-  --footer-bg: #0a4275;
+  --footer-bg: #519bbe;
+  --header-bg: #297395;
+  --header-dark-bg: #0f4964;
   --buttons-color: #fdbc0c;
 }
 
@@ -13,7 +15,8 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
-  // color: var(--text-color);
+  color: var(--text-color);
+  // background: linear-gradient(0deg, #004e92, #000428);
 }
 
 code {
