@@ -8,7 +8,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  .prevcard__header {
-    cursor: pointer;
-  }
+}
+
+.board-list__link {
+  max-width: 22rem;
+  padding: 0;
 }
