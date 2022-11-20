@@ -16,6 +16,7 @@ import './Navigation.scss';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
+  const [language, setLanguage] = useState(false);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -25,6 +26,10 @@ export function Navigation() {
 
   window.addEventListener('scroll', changeNavBarTheme);
 
+  const changeLanguage = () => {
+    setLanguage(!language);
+  };
+
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark" className={navBarTheme}>
       <Container>
@@ -32,8 +37,8 @@ export function Navigation() {
           Project Management App
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-end">
-          <Nav className="me-auto mr-5">
+        <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
+          <Nav className="me-auto navbar__link-container">
             <Nav.Link className="navbar__link" as={Link} to="/board">
               <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
               New Board
@@ -47,15 +52,15 @@ export function Navigation() {
               Edit Profile
             </Nav.Link>
           </Nav>
-          <Nav>
-            <Nav.Link className="navbar__link" as={Link} to="/bo">
+          <Nav className="navbar__btn-container">
+            <button type="button" className="navbar__btn" onClick={changeLanguage}>
               <FontAwesomeIcon className="element__star mr-1" icon={faGlobe} size="xs" />
-              En
-            </Nav.Link>
-            <Nav.Link className="navbar__link" as={Link} to="/bo">
+              {language ? 'Ru' : 'En'}
+            </button>
+            <button type="button" className="navbar__btn">
               <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
               Sign out
-            </Nav.Link>
+            </button>
           </Nav>
         </Navbar.Collapse>
       </Container>
