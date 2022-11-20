@@ -1,10 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { App } from './App';
 import { Main } from 'pages/Main/Main';
 import { BoardList } from 'pages/BoardList/BoardList';
-import { Board } from 'pages/Board/Board';
+import { NewBoard } from 'pages/NewBoard/NewBoard';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 
@@ -15,15 +14,7 @@ describe('Router', () => {
         <App />
       </BrowserRouter>
     );
-    expect(screen.getByText(/my app/i)).toBeInTheDocument();
-  });
-  test('should render loading', () => {
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
-    expect(screen.getByTestId(/load-container/i)).toBeInTheDocument();
+    expect(screen.getByText(/Project Management App/i)).toBeInTheDocument();
   });
   test('should render error page if the path is wrong', () => {
     render(
@@ -31,7 +22,7 @@ describe('Router', () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/board-list" element={<BoardList />} />
-          <Route path="/board" element={<Board />} />
+          <Route path="/board" element={<NewBoard />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>
       </MemoryRouter>

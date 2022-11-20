@@ -1,3 +1,16 @@
-.board-list__title{
-  color: var(--bs-info);
+.board-list__title {
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+}
+
+.board-list__container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.board-list__link {
+  max-width: 22rem;
+  padding: 0;
 }
