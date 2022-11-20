@@ -33,13 +33,13 @@ export function Navigation() {
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark" className={navBarTheme}>
       <Container>
-        <Navbar.Brand className="font-weight-bold" href="/">
+        <Navbar.Brand className="font-weight-bold navbar__logo" href="/">
           Project Management App
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
           <Nav className="me-auto navbar__link-container">
-            <Nav.Link className="navbar__link" as={Link} to="/board">
+            <Nav.Link className="navbar__link" as={Link} to="/new-board">
               <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
               New Board
             </Nav.Link>
