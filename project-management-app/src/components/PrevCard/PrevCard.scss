@@ -1,12 +1,7 @@
-.prevcard {
-  width: 100%;
-  cursor: pointer;
-  .prevcard__header {
-    cursor: pointer;
-    transition: 0.4s;
-    color: var(--primary);
-    &:hover {
-      color: var(--header-bg);
-    }
-  }
+.board__card {
+  padding: 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background: var(--nav-color);
+  border-radius: .5rem;
+  min-width: 15rem;
 }

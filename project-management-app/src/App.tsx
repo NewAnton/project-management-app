@@ -7,6 +7,7 @@ import { BoardList } from 'pages/BoardList/BoardList';
 import { Board } from 'pages/Board/Board';
 import { NewBoard } from 'pages/NewBoard/NewBoard';
 import { Profile } from 'pages/Profile/Profile';
+import { Task } from 'components/Task/Task';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
 import { Footer } from 'components/Footer/Footer';
 
@@ -25,6 +26,7 @@ export function App() {
           <Route path="/new-board" element={<NewBoard />} />
           <Route path="/board" element={<Board />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/task" element={<Task />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>
       </main>

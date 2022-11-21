@@ -53,3 +53,19 @@ code {
     linear-gradient(180deg, var(--header-dark-bg) 30%, rgba(0, 0, 0, 0) 31%);
   background-color: var(--scrollbar);
 }
+
+::-webkit-scrollbar-button:horizontal:end:increment {
+    background:
+        linear-gradient(210deg, var(--header-dark-bg) 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(330deg, var(--header-dark-bg) 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(90deg, var(--header-dark-bg) 30%, rgba(0, 0, 0, 0) 31%);
+    background-color: var(--scrollbar);
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement {
+    background:
+        linear-gradient(30deg, var(--header-dark-bg) 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(150deg, var(--header-dark-bg) 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(270deg, var(--header-dark-bg) 30%, rgba(0, 0, 0, 0) 31%);
+    background-color: var(--scrollbar);
+}
