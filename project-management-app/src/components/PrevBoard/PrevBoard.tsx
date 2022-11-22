@@ -11,15 +11,15 @@ import './PrevBoard.scss';
 
 export function PrevBoard() {
   return (
-    <Card bg="Light" text="dark" className="prevcard mb-4">
+    <Card bg="Light" text="dark" className="prevboard mb-4">
       <Card.Header className="d-flex justify-content-between">
-        <div className="prevcard__header d-flex align-items-center">
-          <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faEdit} />
-          <div className="prevcard__header-description">Edit</div>
+        <div className="prevboard__header d-flex align-items-center">
+          <FontAwesomeIcon className="prevboard__header-icon mr-1" icon={faEdit} />
+          <div className="prevboard__header-description">Edit</div>
         </div>
-        <div className="prevcard__header d-flex align-items-center">
-          <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
-          <div className="prevcard__header-description">Delete</div>
+        <div className="prevboard__header d-flex align-items-center">
+          <FontAwesomeIcon className="prevboard__header-icon mr-1" icon={faTrash} />
+          <div className="prevboard__header-description">Delete</div>
         </div>
       </Card.Header>
       <Card.Body>
