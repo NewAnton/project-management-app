@@ -32,6 +32,7 @@ code {
 ::-webkit-scrollbar-thumb {
   background-color: var(--header-bg);
   box-shadow: inset 1px 1px 8px #f3faf7;
+  border-radius: 0.25rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
