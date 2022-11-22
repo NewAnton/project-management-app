@@ -1,6 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom';
 
 import { PrevTask } from 'components/PrevTask/PrevTask';
 
@@ -17,7 +19,9 @@ export function Card() {
       </div>
       <div className="board__card-container">
         {Array.from({ length: 6 }).map((_, idx) => (
-          <PrevTask key={idx} />
+          <Nav.Link className="board__card-link" key={idx} as={Link} to="/task">
+            <PrevTask />
+          </Nav.Link>
         ))}
       </div>
       <div className="board__card-footer">
