@@ -1,6 +1,10 @@
 import React from 'react';
+import { useAuthSignInQuery, useGetUsersQuery } from '../../services/kanbanApi';
 
 export function Main() {
+  // const data = useAuthSignInQuery({ login: 'firstUser', password: 'firstPassword' });
+  // console.log(useGetUsersQuery());
+
   return (
     <>
       <h1>Main Page</h1>
