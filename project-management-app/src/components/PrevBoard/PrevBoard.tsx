@@ -3,13 +3,13 @@ import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import './PrevCard.scss';
+import './PrevBoard.scss';
 
 // interface IPrevCardProps {
 //   getCurrentCard: () => void;
 // }
 
-export function PrevCard() {
+export function PrevBoard() {
   return (
     <Card bg="Light" text="dark" className="prevcard mb-4">
       <Card.Header className="d-flex justify-content-between">

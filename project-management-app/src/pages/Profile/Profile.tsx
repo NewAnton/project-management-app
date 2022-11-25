@@ -1,12 +1,10 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 
-import './NewBoard.scss';
-
-export function NewBoard() {
+export function Profile() {
   return (
     <Container>
-      <h2 className="main__title">New Board</h2>
+      <h2 className="main__title">Edit Profile</h2>
     </Container>
   );
 }
