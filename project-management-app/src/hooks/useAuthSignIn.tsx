@@ -3,7 +3,7 @@ import { DecodedTokenInterface } from 'types/DecodedTokenInterface';
 import { SignInRequest } from 'types/kanbanApiTypes';
 import { useAuthSignInQuery } from '../services/kanbanApiAuth';
 
-export function useAutSignIn({ login, password }: SignInRequest): DecodedTokenInterface | null {
+export function useAuthSignIn({ login, password }: SignInRequest): DecodedTokenInterface | null {
   const { data } = useAuthSignInQuery({ login, password });
   let token = '';
   if (data) token = data.token;
