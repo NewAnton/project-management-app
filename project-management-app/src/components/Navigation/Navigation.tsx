@@ -61,6 +61,14 @@ export function Navigation() {
               <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
               Sign out
             </button>
+            <button type="button" className="navbar__btn">
+              <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
+              Sign in
+            </button>
+            <button type="button" className="navbar__btn">
+              <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
+              Sign up
+            </button>
           </Nav>
         </Navbar.Collapse>
       </Container>

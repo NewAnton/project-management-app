@@ -10,7 +10,7 @@ export const kanbanApiAuth = kanbanApi.injectEndpoints({
         body: payload,
       }),
     }),
-    authSignUp: builder.mutation<SignUpRequest, SignUpResponse>({
+    authSignUp: builder.mutation<SignUpResponse, SignUpRequest>({
       query: (payload) => ({
         url: `/auth/signup`,
         method: 'POST',
