@@ -5,7 +5,7 @@ import { useAuthSignIn } from 'hooks/useAuthSignIn';
 
 export function SignInForm() {
   const [signInData, setSignInData] = useState({ login: '', password: '' });
-  console.log(useAuthSignIn({ ...signInData }));
+  useAuthSignIn(signInData, Boolean(!signInData.login && !signInData.password));
 
   const { register, handleSubmit } = useForm<SignInRequest>();
 

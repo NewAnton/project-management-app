@@ -4,8 +4,7 @@ import { useAuthSignUpMutation } from 'services/kanbanApiAuth';
 import { SignUpRequest } from 'types/kanbanApiTypes';
 
 export function SignUpForm() {
-  const [signUpRequest, signUpRequestResult] = useAuthSignUpMutation();
-  console.log(signUpRequestResult);
+  const [signUpRequest] = useAuthSignUpMutation();
 
   const { register, handleSubmit } = useForm<SignUpRequest>();
 

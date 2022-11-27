@@ -5,8 +5,6 @@ import { SignInForm } from 'components/SignInForm/SignInForm';
 import { authSignOut } from 'services/authSignOut';
 
 export function Main() {
-  // useAutSignIn({ login: 'firstUser', password: 'firstPassword' });
-
   return (
     <Container>
       <SignUpForm />
