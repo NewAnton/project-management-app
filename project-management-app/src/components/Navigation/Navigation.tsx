@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import './Navigation.scss';
-import { NewBoardFormModal } from 'pages/NewBoard/NewBoard';
+import { NewBoardFormModal } from 'components/NewBoard/NewBoard';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');

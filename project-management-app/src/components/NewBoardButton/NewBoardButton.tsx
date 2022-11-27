@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { NewBoardFormModal } from 'pages/NewBoard/NewBoard';
+import { NewBoardFormModal } from 'components/NewBoard/NewBoard';
 
 export function NewBoardButton() {
   return (

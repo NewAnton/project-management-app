@@ -5,7 +5,6 @@ import { Navigation } from './components/Navigation/Navigation';
 import { Main } from 'pages/Main/Main';
 import { BoardList } from 'pages/BoardList/BoardList';
 import { Board } from 'pages/Board/Board';
-import { NewBoard, NewBoardFormModal } from 'pages/NewBoard/NewBoard';
 import { Profile } from 'pages/Profile/Profile';
 import { Task } from 'components/Task/Task';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
@@ -24,7 +23,7 @@ export function App() {
           <Route path="/" element={<Main />} />
           <Route path="/board-list" element={<BoardList />} />
           {/* <button onClick={() => console.log(666)}>New Board</button> */}
-          <Route path="/board" element={<Board />} />
+          {/* <Route path="/board" element={<Board name={''} description={''} />} /> */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/task" element={<Task />} />
           <Route path="*" element={<ErrorPage404 />} />

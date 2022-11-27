@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { PrevTask } from 'components/PrevTask/PrevTask';
 
 import './Card.scss';
+import { FormValues } from 'components/NewBoard/NewBoard';
 
 export function Card() {
   return (
