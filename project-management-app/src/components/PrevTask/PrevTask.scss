@@ -1,0 +1,12 @@
+.prevTask__container {
+  background-color: var(--secondary-color);
+  border-radius: 0.3rem;
+  padding: 0.6rem 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  .prevTask__header {
+    border-bottom: 0.05rem solid var(--header-bg);
+  }
+  .prevTask__description {
+    font-size: 0.8rem;
+  }
+}

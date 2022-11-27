@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Container from 'react-bootstrap/Container';
 
 import './NewBoard.scss';
 
@@ -97,5 +98,10 @@ export function NewBoard() {
     <>
       <h2 className="board__title">New Board</h2>
     </>
+  );
+  return (
+    <Container>
+      <h2 className="main__title">New Board</h2>
+    </Container>
   );
 }

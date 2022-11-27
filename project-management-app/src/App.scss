@@ -12,6 +12,11 @@
   padding: 4.5rem 2rem 1rem 2rem;
   background-image: url('./assets/bg-1.jpg');
   background-size: cover;
+  .main__title {
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+}
 }
 
 .footer {
