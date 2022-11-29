@@ -48,6 +48,10 @@ export function BoardList() {
 
   console.log(columnsData);
 
+  const clickHandlerBoard = (boardId: string) => {
+    console.log(boardId);
+  };
+
   return (
     <Container>
       <h2 className="main__title" onClick={funcAddCol}>
@@ -57,7 +61,13 @@ export function BoardList() {
       <div className="board-list__container">
         {isLoading && <Loading />}
         {boardsData?.map((board) => (
-          <Nav.Link className="board-list__link" key={board._id} as={Link} to="/board">
+          <Nav.Link
+            onClick={() => clickHandlerBoard(board._id)}
+            className="board-list__link"
+            key={board._id}
+            as={Link}
+            to="/board"
+          >
             <PrevBoard
               title={JSON.parse(board.title).title}
               description={JSON.parse(board.title).description}
