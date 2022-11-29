@@ -15,9 +15,7 @@ interface IBoardProps {
 }
 
 export function Board({ boardId }: IBoardProps) {
-  const { isLoading, isError, data: columnsData } = useGetColumnsInBoardQuery(boardId);
-
-  console.log(columnsData);
+  const { isLoading, isError, data: cardsData } = useGetColumnsInBoardQuery(boardId);
 
   return (
     <div className="board__wrapper container-fluid">
@@ -27,8 +25,8 @@ export function Board({ boardId }: IBoardProps) {
       </Container>
       <div className="board__container row flex-row flex-nowrap mt-4 pb-4 pt-2">
         {isLoading && <Loading />}
-        {columnsData?.map((card) => (
-          <Card title={card.title} key={card._id} />
+        {cardsData?.map((card) => (
+          <Card title={card.title} cardId={card._id} key={card._id} />
         ))}
         <div className="board__card card-btn">
           <div className="card-btn__title">

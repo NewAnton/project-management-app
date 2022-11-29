@@ -5,14 +5,24 @@ import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
 import { PrevTask } from 'components/PrevTask/PrevTask';
+import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Card.scss';
 
 interface ICardProps {
   title: string;
+  cardId: string;
 }
 
-export function Card({ title }: ICardProps) {
+export function Card({ title, cardId }: ICardProps) {
+  const { boardID } = useTypedSelector((state) => state.boardID);
+
+  const { data: tasksData } = useGetTasksInColumnQuery({
+    boardId: boardID,
+    columnId: cardId,
+  });
+
   return (
     <div className="board__card">
       <div className="board__card-header d-flex align-items-center justify-content-between">
@@ -22,9 +32,9 @@ export function Card({ title }: ICardProps) {
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
       </div>
       <div className="board__card-container">
-        {Array.from({ length: 3 }).map((_, idx) => (
-          <Nav.Link className="board__card-link" key={idx} as={Link} to="/task">
-            <PrevTask />
+        {tasksData?.map((task) => (
+          <Nav.Link className="board__card-link" key={task._id} as={Link} to="/task">
+            <PrevTask title={task.title} description={task.description} />
           </Nav.Link>
         ))}
       </div>
