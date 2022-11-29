@@ -1,68 +1,36 @@
-import { ReactPortal } from 'components/ReactPortal/ReactPortal';
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 interface ModalWindowInterface {
   children: JSX.Element;
-  isOpen: boolean;
-  handleClose: () => void;
+  show: boolean;
+  onHide: () => void;
 }
 
-export function ModalWindow({ children, isOpen, handleClose }: ModalWindowInterface) {
-  // useEffect(() => {
-  //   const closeOnEscapeKey = (event: KeyboardEvent) => {
-  //     event.key === 'Escape' ? handleClose() : null;
-  //   };
-  //   document.body.addEventListener('keydown', closeOnEscapeKey);
-  //   return () => {
-  //     document.body.removeEventListener('keydown', closeOnEscapeKey);
-  //   };
-  // }, [handleClose]);
-
-  if (!isOpen) return null;
-
+export function ModalWindow(props: ModalWindowInterface) {
   return (
-    <ReactPortal wrapperId="portal-root">
-      {/* <button
-        type="button"
-        className="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Launch demo modal
-      </button> */}
-      <div
-        className={'modal fade ' + (isOpen && 'show')}
-        id="exampleModal"
-        tabIndex={-1}
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Modal title
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={handleClose}
-              ></button>
-            </div>
-            <div className="modal-body">{children}</div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                Close
-              </button>
-              <button type="button" className="btn btn-primary">
-                Save changes
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ReactPortal>
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      className="text-dark"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>Centered Modal</h4>
+        <p>
+          Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
+          in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+        </p>
+        {props.children}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }

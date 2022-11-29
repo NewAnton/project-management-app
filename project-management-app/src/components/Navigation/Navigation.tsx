@@ -39,9 +39,6 @@ export function Navigation() {
 
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark" className={navBarTheme}>
-      <ModalWindow isOpen={isModalOpen} handleClose={handleCloseSignIn}>
-        <h1>Bingo!</h1>
-      </ModalWindow>
       <Container>
         <Navbar.Brand className="font-weight-bold navbar__logo" href="/">
           Project Management App
@@ -77,6 +74,9 @@ export function Navigation() {
               <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
               Sign out
             </button>
+            <ModalWindow show={isModalOpen} onHide={handleCloseSignIn}>
+              <h1>Bingo!</h1>
+            </ModalWindow>
             {/* <button type="button" className="navbar__btn">
               <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
               Sign in
