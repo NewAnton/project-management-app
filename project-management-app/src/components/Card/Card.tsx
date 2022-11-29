@@ -18,14 +18,14 @@ export function Card() {
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
       </div>
       <div className="board__card-container">
-        {Array.from({ length: 6 }).map((_, idx) => (
+        {Array.from({ length: 3 }).map((_, idx) => (
           <Nav.Link className="board__card-link" key={idx} as={Link} to="/task">
             <PrevTask />
           </Nav.Link>
         ))}
       </div>
       <div className="board__card-footer">
-        <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
+        <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
         Add Task
       </div>
     </div>

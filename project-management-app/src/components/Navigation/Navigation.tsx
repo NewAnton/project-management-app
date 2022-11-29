@@ -40,25 +40,25 @@ export function Navigation() {
         <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
           <Nav className="me-auto navbar__link-container">
             <Nav.Link className="navbar__link" as={Link} to="/new-board">
-              <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
+              <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
               New Board
             </Nav.Link>
             <Nav.Link className="navbar__link" as={Link} to="/board-list">
-              <FontAwesomeIcon className="element__star mr-1" icon={faListSquares} size="xs" />
+              <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
               Boards
             </Nav.Link>
             <Nav.Link className="navbar__link" as={Link} to="/profile">
-              <FontAwesomeIcon className="element__star mr-1" icon={faUser} size="xs" />
+              <FontAwesomeIcon className="mr-1" icon={faUser} size="xs" />
               Edit Profile
             </Nav.Link>
           </Nav>
           <Nav className="navbar__btn-container">
             <button type="button" className="navbar__btn" onClick={changeLanguage}>
-              <FontAwesomeIcon className="element__star mr-1" icon={faGlobe} size="xs" />
+              <FontAwesomeIcon className="mr-1" icon={faGlobe} size="xs" />
               {language ? 'Ru' : 'En'}
             </button>
             <button type="button" className="navbar__btn">
-              <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
+              <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
               Sign out
             </button>
             <button type="button" className="navbar__btn">
