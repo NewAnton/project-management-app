@@ -6,6 +6,7 @@ import { Modal } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useCreateBoardMutation } from 'services/kanbanApiBoards';
 
 export type FormValues = {
   name: string;
@@ -43,20 +44,19 @@ export function NewBoardFormModal() {
   );
 
   function NewBoardForm() {
+    const [createBoard] = useCreateBoardMutation();
     const {
       register,
       handleSubmit,
       reset,
       formState: { errors, isValid },
     } = useForm<FormValues>({ mode: 'onBlur' });
-    const onSubmit = (data: FormValues) => {
-      const newBoardsList: FormValues[] = [];
-      const boardsList = localStorage.getItem('boards');
-      if (boardsList) {
-        newBoardsList.push(...JSON.parse(boardsList));
-      }
-      newBoardsList.push(data);
-      localStorage.setItem('boards', JSON.stringify(newBoardsList));
+    const onSubmit = async (data: FormValues) => {
+      createBoard({
+        title: JSON.stringify({ title: data.name, description: data.description }),
+        owner: '123qwerty',
+        users: ['123qwerty'],
+      });
       reset();
       handleClose();
     };
@@ -92,11 +92,6 @@ export function NewBoardFormModal() {
 }
 
 export function NewBoard() {
-  // return (
-  //   <>
-  //     <h2 className="board__title">New Board</h2>
-  //   </>
-  // );
   return (
     <Container>
       <h2 className="main__title">New Board</h2>

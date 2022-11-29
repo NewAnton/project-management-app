@@ -15,8 +15,6 @@ import { Loading } from 'components/Loading/Loading';
 import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
 
 import './BoardList.scss';
-import { FormValues } from 'components/NewBoard/NewBoard';
-import { Board } from 'pages/Board/Board';
 
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
@@ -53,11 +51,6 @@ export function BoardList() {
   const clickHandlerBoard = (boardId: string) => {
     console.log(boardId);
   };
-
-  const boards: FormValues[] = JSON.parse(
-    localStorage.getItem('boards') ??
-      `[{ "name": "some board", "description": "some description" }]`
-  );
 
   return (
     <Container>
