@@ -30,7 +30,6 @@ export function App() {
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>
       </main>
-
       <Footer />
     </>
   );
