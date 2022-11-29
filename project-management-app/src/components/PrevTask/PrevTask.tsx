@@ -11,7 +11,7 @@ export function PrevTask() {
         <div className="prevTask__title">Name of Task</div>
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faClose} />
       </div>
-      <div className="prevTask__description">Description dsgsfdh sdfgdsfgsa assgsa asdg Task</div>
+      <div className="prevTask__description">Description Task</div>
     </div>
   );
 }

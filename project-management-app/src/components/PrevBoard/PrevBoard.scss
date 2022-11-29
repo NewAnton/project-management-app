@@ -1,8 +1,7 @@
-.prevcard {
+.prevboard {
   width: 100%;
   cursor: pointer;
-  .prevcard__header {
-    cursor: pointer;
+  .prevboard__header {
     transition: 0.4s;
     color: var(--primary);
     &:hover {
