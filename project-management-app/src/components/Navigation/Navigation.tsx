@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -11,12 +12,14 @@ import {
   faGlobe,
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 
 import './Navigation.scss';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
   const [language, setLanguage] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -30,8 +33,15 @@ export function Navigation() {
     setLanguage(!language);
   };
 
+  const handleCloseSignIn = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark" className={navBarTheme}>
+      <ModalWindow isOpen={isModalOpen} handleClose={handleCloseSignIn}>
+        <h1>Bingo!</h1>
+      </ModalWindow>
       <Container>
         <Navbar.Brand className="font-weight-bold navbar__logo" href="/">
           Project Management App
@@ -57,7 +67,13 @@ export function Navigation() {
               <FontAwesomeIcon className="mr-1" icon={faGlobe} size="xs" />
               {language ? 'Ru' : 'En'}
             </button>
-            <button type="button" className="navbar__btn">
+            <button
+              type="button"
+              className="navbar__btn"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
               <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
               Sign out
             </button>
