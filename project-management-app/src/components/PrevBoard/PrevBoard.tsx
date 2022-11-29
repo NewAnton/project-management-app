@@ -5,11 +5,13 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import './PrevBoard.scss';
 
-// interface IPrevCardProps {
-//   getCurrentCard: () => void;
-// }
+interface IPrevBoardProps {
+  title: string;
+  description: string;
+  // getCurrentCard: () => void;
+}
 
-export function PrevBoard() {
+export function PrevBoard(props: IPrevBoardProps) {
   return (
     <Card bg="Light" text="dark" className="prevboard mb-4">
       <Card.Header className="d-flex justify-content-between">
@@ -23,11 +25,8 @@ export function PrevBoard() {
         </div>
       </Card.Header>
       <Card.Body>
-        <Card.Title> Card Title </Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the bulk of the card
-          content.
-        </Card.Text>
+        <Card.Title> {props.title} </Card.Title>
+        <Card.Text>{props.description}</Card.Text>
       </Card.Body>
     </Card>
   );
