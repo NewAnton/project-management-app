@@ -8,12 +8,16 @@ import { PrevTask } from 'components/PrevTask/PrevTask';
 
 import './Card.scss';
 
-export function Card() {
+interface ICardProps {
+  title: string;
+}
+
+export function Card({ title }: ICardProps) {
   return (
     <div className="board__card">
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
-          First Card <span className="board__card-count">2</span>
+          {title} <span className="board__card-count">2</span>
         </div>
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
       </div>

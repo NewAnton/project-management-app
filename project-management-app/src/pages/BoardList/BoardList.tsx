@@ -13,17 +13,19 @@ import { PrevBoard } from 'components/PrevBoard/PrevBoard';
 import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
 import { Loading } from 'components/Loading/Loading';
 import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
+import { useActions } from 'hooks/useActions';
 
 import './BoardList.scss';
 
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
-  const { data: columnsData } = useGetColumnsInBoardQuery('638601fb7d51b3a61a8eb7c9');
+  const { changeBoardID } = useActions();
 
+  const { data: columnsData } = useGetColumnsInBoardQuery('638601fb7d51b3a61a8eb7c9');
   const [addColumn] = useCreateColumnInBoardMutation();
   const [deleteBoard] = useDeleteBoardByIdMutation();
   const [createBoard] = useCreateBoardMutation();
-  console.log(boardsData);
+  // console.log(boardsData);
 
   const funcAddCol = () => {
     addColumn({
@@ -46,10 +48,10 @@ export function BoardList() {
     });
   };
 
-  console.log(columnsData);
+  // console.log(columnsData);
 
   const clickHandlerBoard = (boardId: string) => {
-    console.log(boardId);
+    changeBoardID(boardId);
   };
 
   return (
