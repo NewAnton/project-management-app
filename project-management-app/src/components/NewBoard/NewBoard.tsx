@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import './NewBoard.scss';
 import { useForm } from 'react-hook-form';
-import { Modal } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useCreateBoardMutation } from 'services/kanbanApiBoards';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 
 export type FormValues = {
   name: string;
@@ -14,9 +13,9 @@ export type FormValues = {
 };
 
 export function NewBoardFormModal() {
-  const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const [isNewBoardModalOpen, setNewBoardModalOpen] = useState(false);
+  const handleShowNewBoardModal = () => setNewBoardModalOpen(true);
+  const handleCloseNewBoardModal = () => setNewBoardModalOpen(false);
 
   return (
     <>
@@ -26,20 +25,18 @@ export function NewBoardFormModal() {
           border: 'none',
         }}
         className="navbar__link"
-        onClick={() => handleShow()}
+        onClick={() => handleShowNewBoardModal()}
       >
         <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
         New Board
       </button>
-
-      <Modal show={show} onHide={handleClose} centered id="add-board-form">
-        <Modal.Header closeButton>
-          <Modal.Title style={{ color: 'black' }}>Create Board</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <NewBoardForm />
-        </Modal.Body>
-      </Modal>
+      <ModalWindow
+        show={isNewBoardModalOpen}
+        onHide={handleCloseNewBoardModal}
+        title="Create board"
+      >
+        <NewBoardForm />
+      </ModalWindow>
     </>
   );
 
@@ -58,7 +55,7 @@ export function NewBoardFormModal() {
         users: ['123qwerty'],
       });
       reset();
-      handleClose();
+      handleCloseNewBoardModal();
     };
 
     //console.log(errors);
