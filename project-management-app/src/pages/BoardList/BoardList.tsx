@@ -79,24 +79,27 @@ export function BoardList() {
       <h2 className="main__title" onClick={funcAddTask}>
         Boards List
       </h2>
-      {isError && <ErrorMessage message="Something went wrong..." />}
-      <div className="board-list__container">
-        {isLoading && <Loading />}
-        {boardsData?.map((board) => (
-          <Nav.Link
-            onClick={() => clickHandlerBoard(board._id)}
-            className="board-list__link"
-            key={board._id}
-            as={Link}
-            to="/board"
-          >
-            <PrevBoard
-              title={JSON.parse(board.title).title}
-              description={JSON.parse(board.title).description}
-            />
-          </Nav.Link>
-        ))}
-      </div>
+      {isError ? (
+        <ErrorMessage message="Something went wrong..." />
+      ) : (
+        <div className="board-list__container">
+          {isLoading && <Loading />}
+          {boardsData?.map((board) => (
+            <Nav.Link
+              onClick={() => clickHandlerBoard(board._id)}
+              className="board-list__link"
+              key={board._id}
+              as={Link}
+              to="/board"
+            >
+              <PrevBoard
+                title={JSON.parse(board.title).title}
+                description={JSON.parse(board.title).description}
+              />
+            </Nav.Link>
+          ))}
+        </div>
+      )}
     </Container>
   );
 }

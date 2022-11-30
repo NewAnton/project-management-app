@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Nav from 'react-bootstrap/Nav';
@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
 
@@ -17,11 +19,17 @@ interface ICardProps {
 
 export function Card({ title, cardId }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
+  const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
 
   const { data: tasksData } = useGetTasksInColumnQuery({
     boardId: boardID,
     columnId: cardId,
   });
+
+  const handleCloseNewTaskModal = () => {
+    setisNewTaskModalOpen(!isNewTaskModalOpen);
+  };
+  console.log(isNewTaskModalOpen);
 
   return (
     <div className="board__card">
@@ -38,10 +46,24 @@ export function Card({ title, cardId }: ICardProps) {
           </Nav.Link>
         ))}
       </div>
-      <div className="board__card-footer">
+      <div
+        className="board__card-footer"
+        onClick={() => {
+          setisNewTaskModalOpen(true);
+        }}
+      >
         <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
         Add Task
       </div>
+      <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
+        <ModalCreateEl
+          title="Name of Task"
+          description="Add description"
+          onHideModal={() => {
+            setisNewTaskModalOpen(false);
+          }}
+        />
+      </ModalWindow>
     </div>
   );
 }
