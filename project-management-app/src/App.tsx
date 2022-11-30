@@ -9,10 +9,13 @@ import { Profile } from 'pages/Profile/Profile';
 import { Task } from 'components/Task/Task';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
 import { Footer } from 'components/Footer/Footer';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './App.scss';
 
 export function App() {
+  const { boardID } = useTypedSelector((state) => state.boardID);
+
   return (
     <>
       <header className="header">
@@ -22,8 +25,6 @@ export function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/board-list" element={<BoardList />} />
-          {/* <button onClick={() => console.log(666)}>New Board</button> */}
-          {/* <Route path="/board" element={<Board name={''} description={''} />} /> */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/task" element={<Task />} />
           <Route path="*" element={<ErrorPage404 />} />

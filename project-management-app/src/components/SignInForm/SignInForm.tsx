@@ -15,7 +15,7 @@ export function SignInForm() {
 
   return (
     <form className="sign-in-form" onSubmit={handleSubmit(onSubmitHandler)}>
-      <h1 className="sign-in-form__h1 h1"> Sign In</h1>
+      {/* <h1 className="sign-in-form__h1 h1"> Sign In</h1> */}
       <div className="form-group">
         <label htmlFor="sign-in-form__login-input">Login</label>
         <input

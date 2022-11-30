@@ -10,7 +10,7 @@ export function SignUpForm() {
 
   return (
     <form className="sign-up-form" onSubmit={handleSubmit(signUpRequest)}>
-      <h1 className="sign-up-form__h1 h1"> Sign Up</h1>
+      {/* <h1 className="sign-up-form__h1 h1"> Sign Up</h1> */}
       <div className="form-group">
         <label htmlFor="sign-up-form__name-input">Name</label>
         <input
