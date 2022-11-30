@@ -13,13 +13,18 @@ import {
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { SignUpForm } from 'components/SignUpForm/SignUpForm';
+import { SignInForm } from 'components/SignInForm/SignInForm';
+import { authSignOut } from 'services/authSignOut';
+import { getToken } from 'services/getToken';
 
 import './Navigation.scss';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
   const [language, setLanguage] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -33,8 +38,12 @@ export function Navigation() {
     setLanguage(!language);
   };
 
-  const handleCloseSignIn = () => {
-    setIsModalOpen(!isModalOpen);
+  const handleCloseSignUpModal = () => {
+    setIsSignUpModalOpen(!isSignUpModalOpen);
+  };
+
+  const handleCloseSignInModal = () => {
+    setIsSignInModalOpen(!isSignInModalOpen);
   };
 
   return (
@@ -68,23 +77,49 @@ export function Navigation() {
               type="button"
               className="navbar__btn"
               onClick={() => {
-                setIsModalOpen(true);
+                setIsSignUpModalOpen(true);
               }}
             >
               <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
-              Sign out
-            </button>
-            <ModalWindow show={isModalOpen} onHide={handleCloseSignIn}>
-              <h1>Bingo!</h1>
-            </ModalWindow>
-            {/* <button type="button" className="navbar__btn">
-              <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
-              Sign in
-            </button>
-            <button type="button" className="navbar__btn">
-              <FontAwesomeIcon className="element__star mr-1" icon={faRightFromBracket} size="xs" />
               Sign up
-            </button> */}
+            </button>
+            <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
+              <SignUpForm />
+            </ModalWindow>
+            {getToken() ? (
+              <button type="button" className="navbar__btn" onClick={authSignOut}>
+                <FontAwesomeIcon
+                  className="element__star mr-1"
+                  icon={faRightFromBracket}
+                  size="xs"
+                />
+                Sign Out
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="navbar__btn"
+                  onClick={() => {
+                    setIsSignInModalOpen(true);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    className="element__star mr-1"
+                    icon={faRightFromBracket}
+                    size="xs"
+                  />
+                  Sign in
+                </button>
+                <ModalWindow
+                  show={isSignInModalOpen}
+                  onHide={handleCloseSignInModal}
+                  title="Sign In"
+                >
+                  <SignInForm />
+                </ModalWindow>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
