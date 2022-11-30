@@ -29,7 +29,6 @@ export function Card({ title, cardId }: ICardProps) {
   const handleCloseNewTaskModal = () => {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
-  console.log(isNewTaskModalOpen);
 
   return (
     <div className="board__card">
@@ -59,9 +58,9 @@ export function Card({ title, cardId }: ICardProps) {
         <ModalCreateEl
           title="Name of Task"
           description="Add description"
-          onHideModal={() => {
-            setisNewTaskModalOpen(false);
-          }}
+          onHideModal={handleCloseNewTaskModal}
+          boardId={boardID}
+          cardId={cardId}
         />
       </ModalWindow>
     </div>
