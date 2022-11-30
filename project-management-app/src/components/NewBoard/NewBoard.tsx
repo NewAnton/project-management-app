@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useCreateBoardMutation } from 'services/kanbanApiBoards';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { getToken } from 'services/getToken';
 
 export type FormValues = {
   name: string;
@@ -25,7 +26,7 @@ export function NewBoardFormModal() {
           border: 'none',
         }}
         className="navbar__link"
-        onClick={() => handleShowNewBoardModal()}
+        onClick={handleShowNewBoardModal}
       >
         <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
         New Board
@@ -33,9 +34,9 @@ export function NewBoardFormModal() {
       <ModalWindow
         show={isNewBoardModalOpen}
         onHide={handleCloseNewBoardModal}
-        title="Create board"
+        title={getToken() ? 'Create board' : 'Something went wrong'}
       >
-        <NewBoardForm />
+        {getToken() ? <NewBoardForm /> : <div>Login please</div>}
       </ModalWindow>
     </>
   );
