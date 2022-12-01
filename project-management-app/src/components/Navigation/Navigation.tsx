@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faPlus,
   faUser,
   faListSquares,
   faGlobe,
@@ -18,7 +19,6 @@ import { authSignOut } from 'services/authSignOut';
 import { getToken } from 'services/getToken';
 
 import './Navigation.scss';
-import { NewBoardFormModal } from 'components/NewBoard/NewBoard';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
@@ -55,7 +55,10 @@ export function Navigation() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
           <Nav className="me-auto navbar__link-container">
-            <NewBoardFormModal />
+            <Nav.Link className="navbar__link">
+              <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
+              New Board
+            </Nav.Link>
             <Nav.Link className="navbar__link" as={Link} to="/board-list">
               <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
               Boards
