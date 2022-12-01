@@ -8,13 +8,18 @@ export const kanbanApiColumns = kanbanApi.injectEndpoints({
         url: `/boards/${boardId}/columns`,
         method: 'GET',
       }),
+      providesTags: ['ColumnTag'],
     }),
-    createColumnInBoard: builder.mutation<Column, { id: string; title: string; order: number }>({
+    createColumnInBoard: builder.mutation<
+      Column,
+      { boardId: string; title: string; order: number }
+    >({
       query: (payload) => ({
-        url: `/boards/${payload.id}/columns`,
+        url: `/boards/${payload.boardId}/columns`,
         method: 'POST',
         body: { title: payload.title, order: payload.order },
       }),
+      invalidatesTags: ['ColumnTag'],
     }),
     getColumnById: builder.query<Column, { boardId: string; columnId: string }>({
       query: (payload) => ({
@@ -37,6 +42,7 @@ export const kanbanApiColumns = kanbanApi.injectEndpoints({
         url: `/boards/${payload.boardId}/columns/${payload.columnId}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['ColumnTag'],
     }),
     getColumnByIdsList: builder.query<Column[], { ids?: string[]; userId?: string }>({
       query: (payload) => ({

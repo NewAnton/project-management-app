@@ -26,15 +26,6 @@ export function BoardList() {
   const [deleteBoard] = useDeleteBoardByIdMutation();
   const [createBoard] = useCreateBoardMutation();
 
-  const funcAddCol = () => {
-    addColumn({
-      id: '638601fb7d51b3a61a8eb7c9',
-      title: 'Column 5 for Board 3',
-      order: 5,
-    });
-    console.log('a');
-  };
-
   const funcDel = () => {
     deleteBoard('638601247d51b3a61a8eb7c5');
   };
@@ -55,7 +46,7 @@ export function BoardList() {
 
   return (
     <Container>
-      <h2 className="main__title" onClick={funcAddCol}>
+      <h2 className="main__title" onClick={funcCreate}>
         Boards List
       </h2>
       {isError ? (
