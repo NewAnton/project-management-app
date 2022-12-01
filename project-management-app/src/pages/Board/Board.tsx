@@ -19,14 +19,23 @@ export function Board({ boardId }: IBoardProps) {
     <div className="board__wrapper container-fluid">
       <Container>
         <h2 className="main__title">Board</h2>
-        {isError && <ErrorMessage message="Something went wrong..." />}
       </Container>
-      <div className="board__container row flex-row flex-nowrap mt-4 pb-4 pt-2">
-        {isLoading && <Loading />}
-        {cardsData?.map((card) => (
-          <Card title={card.title} cardId={card._id} key={card._id} />
-        ))}
-      </div>
+      {isError ? (
+        <ErrorMessage message="Something went wrong..." />
+      ) : (
+        <div className="board__container row flex-row flex-nowrap mt-4 pb-4 pt-2">
+          {isLoading && <Loading />}
+          {cardsData?.map((card) => (
+            <Card title={card.title} cardId={card._id} key={card._id} />
+          ))}
+          <div className="board__card card-btn">
+            <div className="card-btn__title">
+              <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
+              Add Card
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
