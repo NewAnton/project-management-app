@@ -49,3 +49,8 @@ export interface Task {
   userId: string;
   users: string[];
 }
+
+export interface CreateEl {
+  title: string;
+  description: string;
+}

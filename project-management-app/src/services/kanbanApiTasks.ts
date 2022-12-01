@@ -10,14 +10,14 @@ export const kanbanApiTasks = kanbanApi.injectEndpoints({
       }),
     }),
     createTaskInColumn: builder.mutation<
-      Task[],
+      Task,
       {
         boardId: string;
         columnId: string;
         title: string;
         order: number;
         description: string;
-        userId: number;
+        userId: string;
         users: string[];
       }
     >({

@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
+import { Task } from 'types/kanbanApiTypes';
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
 
@@ -17,11 +20,36 @@ interface ICardProps {
 
 export function Card({ title, cardId }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
+  const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
 
   const { data: tasksData } = useGetTasksInColumnQuery({
     boardId: boardID,
     columnId: cardId,
   });
+
+  console.log(tasksData);
+
+  const handleCloseNewTaskModal = () => {
+    setisNewTaskModalOpen(!isNewTaskModalOpen);
+  };
+
+  const [taskArray, setTaskArray] = useState<Task[]>([]);
+
+  const getNewTask = (task: Task): void => {
+    setTaskArray([...(taskArray as []), task]);
+  };
+
+  const removeTask = (taskRemove: Task): void => {
+    const id = taskRemove._id;
+    setTaskArray(taskArray.filter((obj) => obj._id != id));
+  };
+
+  useEffect(() => {
+    if (tasksData !== undefined) {
+      setTaskArray([...taskArray, ...(tasksData as [])]);
+    }
+    console.log('ff');
+  }, [tasksData]);
 
   return (
     <div className="board__card">
@@ -32,16 +60,37 @@ export function Card({ title, cardId }: ICardProps) {
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
       </div>
       <div className="board__card-container">
-        {tasksData?.map((task) => (
+        {taskArray?.map((task) => (
           <Nav.Link className="board__card-link" key={task._id} as={Link} to="/task">
-            <PrevTask title={task.title} description={task.description} />
+            <PrevTask
+              title={task.title}
+              description={task.description}
+              cardId={cardId}
+              taskId={task._id}
+              getRemoveTask={removeTask}
+            />
           </Nav.Link>
         ))}
       </div>
-      <div className="board__card-footer">
+      <div
+        className="board__card-footer"
+        onClick={() => {
+          setisNewTaskModalOpen(true);
+        }}
+      >
         <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
         Add Task
       </div>
+      <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
+        <ModalCreateEl
+          title="Name of Task"
+          description="Add description"
+          onHideModal={handleCloseNewTaskModal}
+          boardId={boardID}
+          cardId={cardId}
+          getTask={getNewTask}
+        />
+      </ModalWindow>
     </div>
   );
 }
