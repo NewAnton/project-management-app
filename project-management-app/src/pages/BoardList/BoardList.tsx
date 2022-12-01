@@ -32,7 +32,7 @@ export function BoardList() {
   const [createBoard] = useCreateBoardMutation();
   const [createTask] = useCreateTaskInColumnMutation();
   // console.log(boardsData);
-  console.log(tasksData);
+  // console.log(tasksData);
 
   const funcAddCol = () => {
     addColumn({
@@ -50,7 +50,7 @@ export function BoardList() {
       title: 'Task 5 (xx)',
       order: 5,
       description: 'Do sumthing again',
-      userId: 0,
+      userId: '0',
       users: ['string'],
     });
     console.log('a');

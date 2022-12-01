@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
+import { Task } from 'types/kanbanApiTypes';
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
@@ -30,6 +31,17 @@ export function Card({ title, cardId }: ICardProps) {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
 
+  // console.log(tasksData);
+
+  const [taskArray, setTaskArray] = useState(tasksData);
+  const getNewTask = (task: Task): void => {
+    setTaskArray((current) => [...(current as []), task]);
+  };
+  // useEffect(() => {
+  //   // setTaskArray((current) => [...current, { Carl }]);
+  // }, [taskArray]);
+  // console.log(taskArray);
+
   return (
     <div className="board__card">
       <div className="board__card-header d-flex align-items-center justify-content-between">
@@ -39,7 +51,7 @@ export function Card({ title, cardId }: ICardProps) {
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
       </div>
       <div className="board__card-container">
-        {tasksData?.map((task) => (
+        {taskArray?.map((task) => (
           <Nav.Link className="board__card-link" key={task._id} as={Link} to="/task">
             <PrevTask title={task.title} description={task.description} />
           </Nav.Link>
@@ -61,6 +73,7 @@ export function Card({ title, cardId }: ICardProps) {
           onHideModal={handleCloseNewTaskModal}
           boardId={boardID}
           cardId={cardId}
+          getTask={getNewTask}
         />
       </ModalWindow>
     </div>

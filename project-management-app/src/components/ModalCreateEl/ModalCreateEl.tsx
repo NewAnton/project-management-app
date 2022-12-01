@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ErrorTextMessage } from 'components/ErrorTextMessage/ErrorTextMessage';
-import { CreateEl } from 'types/kanbanApiTypes';
+import { CreateEl, Task } from 'types/kanbanApiTypes';
 import { useCreateTaskInColumnMutation } from 'services/kanbanApiTasks';
 
 import './ModalCreateEl.scss';
@@ -13,10 +13,18 @@ interface ICreateElForm {
   boardId: string;
   cardId: string;
   onHideModal: () => void;
+  getTask: (task: Task) => void;
 }
 
-export function ModalCreateEl({ title, description, onHideModal, boardId, cardId }: ICreateElForm) {
-  const [createTask] = useCreateTaskInColumnMutation();
+export function ModalCreateEl({
+  title,
+  description,
+  onHideModal,
+  boardId,
+  cardId,
+  getTask,
+}: ICreateElForm) {
+  const [createTask, result] = useCreateTaskInColumnMutation<Task>();
   // const [signInData, setSignInData] = useState({ login: '', password: '' });
   // useAuthSignIn(signInData, Boolean(!signInData.login && !signInData.password));
 
@@ -34,9 +42,14 @@ export function ModalCreateEl({ title, description, onHideModal, boardId, cardId
       title: data.title,
       order: 0,
       description: data.description,
-      userId: 0,
+      userId: '0',
       users: ['string'],
     });
+    // console.log(newTask.then((value) => console.log(value)));
+    // const result = newTask.then((value) => value);
+    console.log(result);
+
+    // getTask(newTask.arg.originalArgs);
   };
 
   return (
