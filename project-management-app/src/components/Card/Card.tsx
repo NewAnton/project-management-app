@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Nav from 'react-bootstrap/Nav';
@@ -12,6 +12,7 @@ import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
+import { Loading } from 'components/Loading/Loading';
 
 interface ICardProps {
   title: string;
@@ -31,9 +32,15 @@ export function Card({ title, cardId }: ICardProps) {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
 
-  console.log(tasksData);
+  const [taskArray, setTaskArray] = useState<Task[]>([]);
 
-  const [taskArray, setTaskArray] = useState(tasksData);
+  useEffect(() => {
+    console.log(tasksData);
+    if (tasksData !== undefined) {
+      setTaskArray([...taskArray, ...(tasksData as [])]);
+    }
+  }, [tasksData]);
+
   const getNewTask = (task: Task): void => {
     setTaskArray([...(taskArray as []), task]);
   };
