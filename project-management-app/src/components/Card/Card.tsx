@@ -12,6 +12,7 @@ import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
+import { FormValues } from 'components/NewBoard/NewBoard';
 
 interface ICardProps {
   title: string;

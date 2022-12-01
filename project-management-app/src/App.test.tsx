@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { App } from './App';
 import { Main } from 'pages/Main/Main';
 import { BoardList } from 'pages/BoardList/BoardList';
-import { NewBoard } from 'pages/NewBoard/NewBoard';
+import { NewBoard } from 'components/NewBoard/NewBoard';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 
