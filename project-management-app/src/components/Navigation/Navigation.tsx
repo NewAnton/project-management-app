@@ -16,7 +16,7 @@ import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { SignUpForm } from 'components/SignUpForm/SignUpForm';
 import { SignInForm } from 'components/SignInForm/SignInForm';
 import { authSignOut } from 'services/authSignOut';
-import { getToken } from 'services/getToken';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Navigation.scss';
 
@@ -25,6 +25,8 @@ export function Navigation() {
   const [language, setLanguage] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const { token } = useTypedSelector((state) => state.globalState);
+  // console.log(token);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -73,21 +75,15 @@ export function Navigation() {
               <FontAwesomeIcon className="mr-1" icon={faGlobe} size="xs" />
               {language ? 'Ru' : 'En'}
             </button>
-            <button
-              type="button"
-              className="navbar__btn"
-              onClick={() => {
-                setIsSignUpModalOpen(true);
-              }}
-            >
-              <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
-              Sign up
-            </button>
-            <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
-              <SignUpForm />
-            </ModalWindow>
-            {getToken() ? (
-              <button type="button" className="navbar__btn" onClick={authSignOut}>
+            {token ? (
+              <button
+                type="button"
+                className="navbar__btn"
+                onClick={() => {
+                  authSignOut();
+                  console.log(token);
+                }}
+              >
                 <FontAwesomeIcon
                   className="element__star mr-1"
                   icon={faRightFromBracket}
@@ -97,6 +93,16 @@ export function Navigation() {
               </button>
             ) : (
               <>
+                <button
+                  type="button"
+                  className="navbar__btn"
+                  onClick={() => {
+                    setIsSignUpModalOpen(true);
+                  }}
+                >
+                  <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
+                  Sign up
+                </button>
                 <button
                   type="button"
                   className="navbar__btn"
@@ -111,15 +117,14 @@ export function Navigation() {
                   />
                   Sign in
                 </button>
-                <ModalWindow
-                  show={isSignInModalOpen}
-                  onHide={handleCloseSignInModal}
-                  title="Sign In"
-                >
-                  <SignInForm />
-                </ModalWindow>
               </>
             )}
+            <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
+              <SignUpForm />
+            </ModalWindow>
+            <ModalWindow show={isSignInModalOpen} onHide={handleCloseSignInModal} title="Sign In">
+              <SignInForm />
+            </ModalWindow>
           </Nav>
         </Navbar.Collapse>
       </Container>
