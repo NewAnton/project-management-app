@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ErrorTextMessage } from 'components/ErrorTextMessage/ErrorTextMessage';
@@ -24,9 +24,7 @@ export function ModalCreateEl({
   cardId,
   getTask,
 }: ICreateElForm) {
-  const [createTask, result] = useCreateTaskInColumnMutation<Task>();
-  // const [signInData, setSignInData] = useState({ login: '', password: '' });
-  // useAuthSignIn(signInData, Boolean(!signInData.login && !signInData.password));
+  const [createTask] = useCreateTaskInColumnMutation<Task>();
 
   const {
     register,
@@ -34,9 +32,9 @@ export function ModalCreateEl({
     formState: { errors },
   } = useForm<CreateEl>();
 
-  const onSubmitHandler = (data: CreateEl) => {
+  const onSubmitHandler = async (data: CreateEl) => {
     onHideModal();
-    createTask({
+    const newTask = createTask({
       boardId: boardId,
       columnId: cardId,
       title: data.title,
@@ -45,11 +43,8 @@ export function ModalCreateEl({
       userId: '0',
       users: ['string'],
     });
-    // console.log(newTask.then((value) => console.log(value)));
-    // const result = newTask.then((value) => value);
-    console.log(result);
-
-    // getTask(newTask.arg.originalArgs);
+    const result = await newTask.unwrap().then((payload) => payload);
+    getTask(result);
   };
 
   return (

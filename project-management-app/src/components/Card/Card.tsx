@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Nav from 'react-bootstrap/Nav';
@@ -31,16 +31,12 @@ export function Card({ title, cardId }: ICardProps) {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
 
-  // console.log(tasksData);
+  console.log(tasksData);
 
   const [taskArray, setTaskArray] = useState(tasksData);
   const getNewTask = (task: Task): void => {
-    setTaskArray((current) => [...(current as []), task]);
+    setTaskArray([...(taskArray as []), task]);
   };
-  // useEffect(() => {
-  //   // setTaskArray((current) => [...current, { Carl }]);
-  // }, [taskArray]);
-  // console.log(taskArray);
 
   return (
     <div className="board__card">
