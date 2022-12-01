@@ -16,42 +16,21 @@ import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
 import { useActions } from 'hooks/useActions';
 
 import './BoardList.scss';
-import { useCreateTaskInColumnMutation, useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
 
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
 
   const { data: columnsData } = useGetColumnsInBoardQuery('638601fb7d51b3a61a8eb7c9');
-  const { data: tasksData } = useGetTasksInColumnQuery({
-    boardId: '638601fb7d51b3a61a8eb7c9',
-    columnId: '638609237d51b3a61a8eb80a',
-  });
   const [addColumn] = useCreateColumnInBoardMutation();
   const [deleteBoard] = useDeleteBoardByIdMutation();
   const [createBoard] = useCreateBoardMutation();
-  const [createTask] = useCreateTaskInColumnMutation();
-  // console.log(boardsData);
-  // console.log(tasksData);
 
   const funcAddCol = () => {
     addColumn({
       id: '638601fb7d51b3a61a8eb7c9',
       title: 'Column 5 for Board 3',
       order: 5,
-    });
-    console.log('a');
-  };
-
-  const funcAddTask = () => {
-    createTask({
-      boardId: '638601fb7d51b3a61a8eb7c9',
-      columnId: '638609237d51b3a61a8eb80a',
-      title: 'Task 5 (xx)',
-      order: 5,
-      description: 'Do sumthing again',
-      userId: '0',
-      users: ['string'],
     });
     console.log('a');
   };
@@ -76,7 +55,7 @@ export function BoardList() {
 
   return (
     <Container>
-      <h2 className="main__title" onClick={funcAddTask}>
+      <h2 className="main__title" onClick={funcAddCol}>
         Boards List
       </h2>
       {isError ? (

@@ -12,7 +12,6 @@ import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
-import { Loading } from 'components/Loading/Loading';
 
 interface ICardProps {
   title: string;
@@ -28,22 +27,29 @@ export function Card({ title, cardId }: ICardProps) {
     columnId: cardId,
   });
 
+  console.log(tasksData);
+
   const handleCloseNewTaskModal = () => {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
 
   const [taskArray, setTaskArray] = useState<Task[]>([]);
 
-  useEffect(() => {
-    console.log(tasksData);
-    if (tasksData !== undefined) {
-      setTaskArray([...taskArray, ...(tasksData as [])]);
-    }
-  }, [tasksData]);
-
   const getNewTask = (task: Task): void => {
     setTaskArray([...(taskArray as []), task]);
   };
+
+  const removeTask = (taskRemove: Task): void => {
+    const id = taskRemove._id;
+    setTaskArray(taskArray.filter((obj) => obj._id != id));
+  };
+
+  useEffect(() => {
+    if (tasksData !== undefined) {
+      setTaskArray([...taskArray, ...(tasksData as [])]);
+    }
+    console.log('ff');
+  }, [tasksData]);
 
   return (
     <div className="board__card">
@@ -56,7 +62,13 @@ export function Card({ title, cardId }: ICardProps) {
       <div className="board__card-container">
         {taskArray?.map((task) => (
           <Nav.Link className="board__card-link" key={task._id} as={Link} to="/task">
-            <PrevTask title={task.title} description={task.description} />
+            <PrevTask
+              title={task.title}
+              description={task.description}
+              cardId={cardId}
+              taskId={task._id}
+              getRemoveTask={removeTask}
+            />
           </Nav.Link>
         ))}
       </div>
