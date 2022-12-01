@@ -1,5 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { Card } from 'components/Card/Card';
 import { Loading } from 'components/Loading/Loading';
