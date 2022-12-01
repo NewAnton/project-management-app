@@ -66,6 +66,9 @@ export function Card({ title, cardId }: ICardProps) {
           onHideModal={handleCloseNewTaskModal}
           boardId={boardID}
           cardId={cardId}
+          showDescription={true}
+          isTask={true}
+          isCard={false}
         />
       </ModalWindow>
     </div>
