@@ -4,7 +4,6 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 import { useDeleteTasksByIdMutation } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
-import { Task } from 'types/kanbanApiTypes';
 
 import './PrevTask.scss';
 
@@ -13,19 +12,16 @@ interface IPrevTaskProps {
   description: string;
   cardId: string;
   taskId: string;
-  getRemoveTask: (task: Task) => void;
 }
 
-export function PrevTask({ title, description, cardId, taskId, getRemoveTask }: IPrevTaskProps) {
+export function PrevTask({ title, description, cardId, taskId }: IPrevTaskProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
   const [deleteTask] = useDeleteTasksByIdMutation();
 
   const handleclick = async (event: React.MouseEvent) => {
     event.preventDefault();
     if ((event.target as Element).closest('.prevcard__header-icon')) {
-      const task = deleteTask({ boardId: boardID, columnId: cardId, taskId: taskId });
-      const result = await task.unwrap().then((payload) => payload);
-      getRemoveTask(result);
+      deleteTask({ boardId: boardID, columnId: cardId, taskId: taskId });
     }
   };
 

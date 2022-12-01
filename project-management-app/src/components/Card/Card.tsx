@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
-import { Task } from 'types/kanbanApiTypes';
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
@@ -27,29 +26,9 @@ export function Card({ title, cardId }: ICardProps) {
     columnId: cardId,
   });
 
-  console.log(tasksData);
-
   const handleCloseNewTaskModal = () => {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
-
-  const [taskArray, setTaskArray] = useState<Task[]>([]);
-
-  const getNewTask = (task: Task): void => {
-    setTaskArray([...(taskArray as []), task]);
-  };
-
-  const removeTask = (taskRemove: Task): void => {
-    const id = taskRemove._id;
-    setTaskArray(taskArray.filter((obj) => obj._id != id));
-  };
-
-  useEffect(() => {
-    if (tasksData !== undefined) {
-      setTaskArray([...taskArray, ...(tasksData as [])]);
-    }
-    console.log('ff');
-  }, [tasksData]);
 
   return (
     <div className="board__card">
@@ -60,14 +39,13 @@ export function Card({ title, cardId }: ICardProps) {
         <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
       </div>
       <div className="board__card-container">
-        {taskArray?.map((task) => (
+        {tasksData?.map((task) => (
           <Nav.Link className="board__card-link" key={task._id} as={Link} to="/task">
             <PrevTask
               title={task.title}
               description={task.description}
               cardId={cardId}
               taskId={task._id}
-              getRemoveTask={removeTask}
             />
           </Nav.Link>
         ))}
@@ -88,7 +66,6 @@ export function Card({ title, cardId }: ICardProps) {
           onHideModal={handleCloseNewTaskModal}
           boardId={boardID}
           cardId={cardId}
-          getTask={getNewTask}
         />
       </ModalWindow>
     </div>

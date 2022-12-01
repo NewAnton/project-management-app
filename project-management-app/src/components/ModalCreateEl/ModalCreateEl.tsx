@@ -13,17 +13,9 @@ interface ICreateElForm {
   boardId: string;
   cardId: string;
   onHideModal: () => void;
-  getTask: (task: Task) => void;
 }
 
-export function ModalCreateEl({
-  title,
-  description,
-  onHideModal,
-  boardId,
-  cardId,
-  getTask,
-}: ICreateElForm) {
+export function ModalCreateEl({ title, description, onHideModal, boardId, cardId }: ICreateElForm) {
   const [createTask] = useCreateTaskInColumnMutation<Task>();
 
   const {
@@ -34,7 +26,7 @@ export function ModalCreateEl({
 
   const onSubmitHandler = async (data: CreateEl) => {
     onHideModal();
-    const newTask = createTask({
+    createTask({
       boardId: boardId,
       columnId: cardId,
       title: data.title,
@@ -43,8 +35,6 @@ export function ModalCreateEl({
       userId: '0',
       users: ['string'],
     });
-    const result = await newTask.unwrap().then((payload) => payload);
-    getTask(result);
   };
 
   return (
@@ -55,6 +45,7 @@ export function ModalCreateEl({
           <input
             className="form__input"
             type="text"
+            autoFocus
             {...register('title', {
               required: {
                 value: true,
