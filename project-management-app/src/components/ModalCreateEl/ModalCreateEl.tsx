@@ -38,7 +38,7 @@ export function ModalCreateEl({
     formState: { errors },
   } = useForm<CreateEl>();
 
-  const onSubmitHandler = async (data: CreateEl) => {
+  const onSubmitHandler = (data: CreateEl) => {
     onHideModal();
     if (isTask) {
       createTask({
@@ -50,6 +50,7 @@ export function ModalCreateEl({
         userId: '0',
         users: ['string'],
       });
+      console.log('isTask');
     } else if (isCard) {
       createCard({
         boardId: boardId,

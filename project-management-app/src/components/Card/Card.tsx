@@ -12,7 +12,6 @@ import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
 
 import './Card.scss';
-import { FormValues } from 'components/NewBoard/NewBoard';
 
 interface ICardProps {
   title: string;
@@ -34,8 +33,7 @@ export function Card({ title, cardId }: ICardProps) {
   };
 
   const handleclick = async (event: React.MouseEvent) => {
-    event.preventDefault();
-    if ((event.target as Element).closest('.prevcard__header-icon')) {
+    if ((event.target as Element).closest('.card__delete')) {
       deleteCard({ boardId: boardID, columnId: cardId });
     }
   };
@@ -44,9 +42,9 @@ export function Card({ title, cardId }: ICardProps) {
     <div className="board__card" onClick={handleclick}>
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
-          {title} <span className="board__card-count">2</span>
+          {title} <span className="board__card-count">{tasksData?.length}</span>
         </div>
-        <FontAwesomeIcon className="prevcard__header-icon mr-1" icon={faTrash} />
+        <FontAwesomeIcon className="prevcard__header-icon card__delete mr-1" icon={faTrash} />
       </div>
       <div className="board__card-container">
         {tasksData?.map((task) => (
