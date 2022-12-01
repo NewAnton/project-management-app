@@ -9,6 +9,7 @@ import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
+import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
 
 import './Card.scss';
 
@@ -20,6 +21,7 @@ interface ICardProps {
 export function Card({ title, cardId }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
   const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
+  const [deleteCard] = useDeleteColumnByIdMutation();
 
   const { data: tasksData } = useGetTasksInColumnQuery({
     boardId: boardID,
@@ -30,8 +32,15 @@ export function Card({ title, cardId }: ICardProps) {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
 
+  const handleclick = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    if ((event.target as Element).closest('.prevcard__header-icon')) {
+      deleteCard({ boardId: boardID, columnId: cardId });
+    }
+  };
+
   return (
-    <div className="board__card">
+    <div className="board__card" onClick={handleclick}>
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
           {title} <span className="board__card-count">2</span>
