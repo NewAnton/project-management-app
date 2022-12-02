@@ -16,7 +16,7 @@ export const kanbanApiTasks = kanbanApi.injectEndpoints({
         boardId: string;
         columnId: string | undefined;
         title: string;
-        order: number;
+        order: number | undefined;
         description: string;
         userId: string;
         users: string[];
