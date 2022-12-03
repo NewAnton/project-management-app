@@ -14,6 +14,7 @@ export const globalStateActionsCreator = createSlice({
   initialState,
   reducers: {
     setToken: (state, action: PayloadAction<string, string>) => {
+      localStorage.setItem('token', action.payload);
       return {
         ...state,
         token: action.payload,

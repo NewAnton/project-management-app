@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SignInRequest } from 'types/kanbanApiTypes';
-import { useAuthSignIn } from 'hooks/useAuthSignIn';
+import { useAuthSignInQuery } from 'services/kanbanApiAuth';
+import { useActions } from 'hooks/useActions';
 
 export function SignInForm() {
   const [signInData, setSignInData] = useState({ login: '', password: '' });
-  useAuthSignIn(signInData, Boolean(!signInData.login && !signInData.password));
-
+  const { setToken } = useActions();
   const { register, handleSubmit } = useForm<SignInRequest>();
+  const { data } = useAuthSignInQuery(
+    { login: signInData.login, password: signInData.password },
+    { skip: Boolean(!signInData.login && !signInData.password) }
+  );
 
   const onSubmitHandler: SubmitHandler<SignInRequest> = (data) => {
     setSignInData({ login: data.login, password: data.password });
   };
+
+  useEffect(() => {
+    if (data) setToken(data.token);
+  }, [data]);
 
   return (
     <form className="sign-in-form" onSubmit={handleSubmit(onSubmitHandler)}>

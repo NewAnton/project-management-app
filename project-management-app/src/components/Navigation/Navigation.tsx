@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
@@ -15,10 +15,10 @@ import {
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { SignUpForm } from 'components/SignUpForm/SignUpForm';
 import { SignInForm } from 'components/SignInForm/SignInForm';
-import { authSignOut } from 'services/authSignOut';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Navigation.scss';
+import { useActions } from 'hooks/useActions';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
@@ -26,7 +26,9 @@ export function Navigation() {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const { token } = useTypedSelector((state) => state.globalState);
-  // console.log(token);
+  const { setToken } = useActions();
+
+  useEffect(() => {}, [token]);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -80,8 +82,8 @@ export function Navigation() {
                 type="button"
                 className="navbar__btn"
                 onClick={() => {
-                  authSignOut();
-                  console.log(token);
+                  setToken('');
+                  localStorage.removeItem('token');
                 }}
               >
                 <FontAwesomeIcon

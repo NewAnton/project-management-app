@@ -1,21 +1,23 @@
-import { useJwt } from 'react-jwt';
-import { globalStateActions } from 'store/action-creators/globalStateActions';
-import { DecodedTokenInterface } from 'types/DecodedTokenInterface';
-import { SignInRequest } from 'types/kanbanApiTypes';
-import { useAuthSignInQuery } from '../services/kanbanApiAuth';
+// import { useJwt } from 'react-jwt';
+// import { DecodedTokenInterface } from 'types/DecodedTokenInterface';
+// import { SignInRequest } from 'types/kanbanApiTypes';
+// import { useAuthSignInQuery } from '../services/kanbanApiAuth';
+// import { useActions } from './useActions';
 
-export function useAuthSignIn(
-  { login, password }: SignInRequest,
-  skip: boolean
-): DecodedTokenInterface | null {
-  const { data } = useAuthSignInQuery({ login, password }, { skip });
-  console.log('action'); //!!!
-  let token = '';
-  if (data) token = data.token;
+// export function useAuthSignIn(
+//   { login, password }: SignInRequest,
+//   skip: boolean
+// ): DecodedTokenInterface | null {
+//   console.log('sign in');
 
-  localStorage.setItem('token', token);
-  globalStateActions.setToken(token);
+//   const { data } = useAuthSignInQuery({ login, password }, { skip });
+//   const { setToken } = useActions();
+//   let token = '';
+//   if (data) token = data.token;
 
-  const decodedData = useJwt<DecodedTokenInterface>(token);
-  return decodedData.decodedToken;
-}
+//   localStorage.setItem('token', token);
+//   setToken(token);
+
+//   const decodedData = useJwt<DecodedTokenInterface>(token);
+//   return decodedData.decodedToken;
+// }
