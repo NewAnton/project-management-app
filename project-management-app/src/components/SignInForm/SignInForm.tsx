@@ -4,7 +4,11 @@ import { SignInRequest } from 'types/kanbanApiTypes';
 import { useAuthSignInQuery } from 'services/kanbanApiAuth';
 import { useActions } from 'hooks/useActions';
 
-export function SignInForm() {
+interface SignUpForm {
+  onSubmitAction: () => void;
+}
+
+export function SignInForm({ onSubmitAction }: SignUpForm) {
   const [signInData, setSignInData] = useState({ login: '', password: '' });
   const { setToken } = useActions();
   const { register, handleSubmit } = useForm<SignInRequest>();
@@ -15,6 +19,7 @@ export function SignInForm() {
 
   const onSubmitHandler: SubmitHandler<SignInRequest> = (data) => {
     setSignInData({ login: data.login, password: data.password });
+    onSubmitAction();
   };
 
   useEffect(() => {

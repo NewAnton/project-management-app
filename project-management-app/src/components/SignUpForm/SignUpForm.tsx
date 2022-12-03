@@ -1,15 +1,24 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuthSignUpMutation } from 'services/kanbanApiAuth';
-import { SignUpRequest } from 'types/kanbanApiTypes';
+import { SignInRequest, SignUpRequest } from 'types/kanbanApiTypes';
 
-export function SignUpForm() {
+interface SignUpForm {
+  onSubmitAction: () => void;
+}
+
+export function SignUpForm({ onSubmitAction }: SignUpForm) {
   const [signUpRequest] = useAuthSignUpMutation();
 
   const { register, handleSubmit } = useForm<SignUpRequest>();
 
+  const onSubmitHandler: SubmitHandler<SignInRequest> = () => {
+    signUpRequest;
+    onSubmitAction();
+  };
+
   return (
-    <form className="sign-up-form" onSubmit={handleSubmit(signUpRequest)}>
+    <form className="sign-up-form" onSubmit={handleSubmit(onSubmitHandler)}>
       {/* <h1 className="sign-up-form__h1 h1"> Sign Up</h1> */}
       <div className="form-group">
         <label htmlFor="sign-up-form__name-input">Name</label>

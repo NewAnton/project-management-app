@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -15,20 +15,21 @@ import {
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { SignUpForm } from 'components/SignUpForm/SignUpForm';
 import { SignInForm } from 'components/SignInForm/SignInForm';
+import { useActions } from 'hooks/useActions';
 import { useTypedSelector } from 'hooks/useTypedSelector';
+import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
 
 import './Navigation.scss';
-import { useActions } from 'hooks/useActions';
 
 export function Navigation() {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
   const [language, setLanguage] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
-  const { token } = useTypedSelector((state) => state.globalState);
   const { setToken } = useActions();
+  const { token } = useTypedSelector((state) => state.globalState);
 
-  useEffect(() => {}, [token]);
+  const isTokenExpired = checkIsTokenExpired(token);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -58,26 +59,28 @@ export function Navigation() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
-          <Nav className="me-auto navbar__link-container">
-            <Nav.Link className="navbar__link" as={Link} to="/new-board">
-              <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-              New Board
-            </Nav.Link>
-            <Nav.Link className="navbar__link" as={Link} to="/board-list">
-              <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
-              Boards
-            </Nav.Link>
-            <Nav.Link className="navbar__link" as={Link} to="/profile">
-              <FontAwesomeIcon className="mr-1" icon={faUser} size="xs" />
-              Edit Profile
-            </Nav.Link>
-          </Nav>
+          {!isTokenExpired && (
+            <Nav className="me-auto navbar__link-container">
+              <Nav.Link className="navbar__link" as={Link} to="/new-board">
+                <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
+                New Board
+              </Nav.Link>
+              <Nav.Link className="navbar__link" as={Link} to="/board-list">
+                <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
+                Boards
+              </Nav.Link>
+              <Nav.Link className="navbar__link" as={Link} to="/profile">
+                <FontAwesomeIcon className="mr-1" icon={faUser} size="xs" />
+                Edit Profile
+              </Nav.Link>
+            </Nav>
+          )}
           <Nav className="navbar__btn-container">
             <button type="button" className="navbar__btn" onClick={changeLanguage}>
               <FontAwesomeIcon className="mr-1" icon={faGlobe} size="xs" />
               {language ? 'Ru' : 'En'}
             </button>
-            {token ? (
+            {!isTokenExpired ? (
               <button
                 type="button"
                 className="navbar__btn"
@@ -122,10 +125,10 @@ export function Navigation() {
               </>
             )}
             <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
-              <SignUpForm />
+              <SignUpForm onSubmitAction={handleCloseSignUpModal} />
             </ModalWindow>
             <ModalWindow show={isSignInModalOpen} onHide={handleCloseSignInModal} title="Sign In">
-              <SignInForm />
+              <SignInForm onSubmitAction={handleCloseSignInModal} />
             </ModalWindow>
           </Nav>
         </Navbar.Collapse>
