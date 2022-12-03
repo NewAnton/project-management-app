@@ -19,11 +19,13 @@ export function SignInForm({ onSubmitAction }: SignUpForm) {
 
   const onSubmitHandler: SubmitHandler<SignInRequest> = (data) => {
     setSignInData({ login: data.login, password: data.password });
-    onSubmitAction();
   };
 
   useEffect(() => {
-    if (data) setToken(data.token);
+    if (data) {
+      setToken(data.token);
+      onSubmitAction();
+    }
   }, [data]);
 
   return (
