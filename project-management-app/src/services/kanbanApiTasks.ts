@@ -8,16 +8,17 @@ export const kanbanApiTasks = kanbanApi.injectEndpoints({
         url: `/boards/${payload.boardId}/columns/${payload.columnId}/tasks`,
         method: 'GET',
       }),
+      providesTags: ['TaskTag'],
     }),
     createTaskInColumn: builder.mutation<
-      Task[],
+      Task,
       {
         boardId: string;
-        columnId: string;
+        columnId: string | undefined;
         title: string;
         order: number;
         description: string;
-        userId: number;
+        userId: string;
         users: string[];
       }
     >({
@@ -32,6 +33,7 @@ export const kanbanApiTasks = kanbanApi.injectEndpoints({
           users: payload.users,
         },
       }),
+      invalidatesTags: ['TaskTag'],
     }),
     getTaskById: builder.query<Task, { boardId: string; columnId: string; taskId: string }>({
       query: (payload) => ({
@@ -70,6 +72,7 @@ export const kanbanApiTasks = kanbanApi.injectEndpoints({
         url: `/boards/${payload.boardId}/columns/${payload.columnId}/tasks/${payload.taskId}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['TaskTag'],
     }),
     getTasksByIdsList: builder.query<Task[], { ids: string[]; userId: string; search: string }>({
       query: (payload) => ({

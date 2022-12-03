@@ -17,14 +17,13 @@ export function PrevBoard({ title, description }: IPrevBoardProps) {
     console.log('edit');
   };
 
-  const handleCard = (event: React.MouseEvent) => {
-    event.preventDefault();
-    console.log('card');
-    console.log(event.target);
-  };
+  // const handleCard = (event: React.MouseEvent) => {
+  //   console.log('card');
+  //   console.log(event.target);
+  // };
 
   return (
-    <Card bg="Light" text="dark" className="prevboard mb-4" onClick={handleCard}>
+    <Card bg="Light" text="dark" className="prevboard mb-4">
       <Card.Header className="d-flex justify-content-between">
         <div className="prevboard__header d-flex align-items-center" onClick={handleEdit}>
           <FontAwesomeIcon className="prevboard__header-icon mr-1" icon={faEdit} />
