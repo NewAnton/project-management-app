@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
-import { useTypedSelector } from 'hooks/useTypedSelector';
+// import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
@@ -16,15 +16,16 @@ import './Card.scss';
 interface ICardProps {
   title: string;
   cardId: string;
+  boardId: string;
 }
 
-export function Card({ title, cardId }: ICardProps) {
-  const { boardID } = useTypedSelector((state) => state.boardID);
+export function Card({ title, cardId, boardId }: ICardProps) {
+  // const { boardID } = useTypedSelector((state) => state.boardID);
   const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
   const [deleteCard] = useDeleteColumnByIdMutation();
 
   const { data: tasksData } = useGetTasksInColumnQuery({
-    boardId: boardID,
+    boardId: boardId,
     columnId: cardId,
   });
 
@@ -34,7 +35,7 @@ export function Card({ title, cardId }: ICardProps) {
 
   const handleclick = async (event: React.MouseEvent) => {
     if ((event.target as Element).closest('.card__delete')) {
-      deleteCard({ boardId: boardID, columnId: cardId });
+      deleteCard({ boardId: boardId, columnId: cardId });
     }
   };
 
@@ -52,6 +53,7 @@ export function Card({ title, cardId }: ICardProps) {
             <PrevTask
               title={task.title}
               description={task.description}
+              boardId={boardId}
               cardId={cardId}
               taskId={task._id}
             />
@@ -72,7 +74,7 @@ export function Card({ title, cardId }: ICardProps) {
           title="Name of Task"
           description="Add description"
           onHideModal={handleCloseNewTaskModal}
-          boardId={boardID}
+          boardId={boardId}
           cardId={cardId}
           showDescription={true}
           isTask={true}

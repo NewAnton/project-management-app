@@ -3,25 +3,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 import { useDeleteTasksByIdMutation } from 'services/kanbanApiTasks';
-import { useTypedSelector } from 'hooks/useTypedSelector';
+// import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './PrevTask.scss';
 
 interface IPrevTaskProps {
   title: string;
   description: string;
+  boardId: string;
   cardId: string;
   taskId: string;
 }
 
-export function PrevTask({ title, description, cardId, taskId }: IPrevTaskProps) {
-  const { boardID } = useTypedSelector((state) => state.boardID);
+export function PrevTask({ title, description, cardId, taskId, boardId }: IPrevTaskProps) {
+  // const { boardID } = useTypedSelector((state) => state.boardID);
   const [deleteTask] = useDeleteTasksByIdMutation();
 
   const handleclick = async (event: React.MouseEvent) => {
     event.preventDefault();
     if ((event.target as Element).closest('.task__delete')) {
-      deleteTask({ boardId: boardID, columnId: cardId, taskId: taskId });
+      deleteTask({ boardId: boardId, columnId: cardId, taskId: taskId });
     }
   };
 

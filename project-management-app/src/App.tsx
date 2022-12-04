@@ -26,7 +26,7 @@ export function App() {
           <Route path="/" element={<Main />} />
           <Route path="/board-list" element={<BoardList />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/board" element={<Board boardId={boardID} />} />
+          <Route path="/board/:id" element={<Board />} />
           <Route path="/task" element={<Task />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>

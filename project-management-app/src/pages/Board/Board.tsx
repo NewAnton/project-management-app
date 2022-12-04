@@ -9,16 +9,17 @@ import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
 import { useGetColumnsInBoardQuery } from 'services/kanbanApiColumns';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
+import { useParams } from 'react-router-dom';
 
 import './Board.scss';
 
-interface IBoardProps {
-  boardId: string;
-}
+export function Board() {
+  const urlParams = useParams();
+  const boardId = (urlParams.id || '').toString();
 
-export function Board({ boardId }: IBoardProps) {
   const { isLoading, isError, data: cardsData } = useGetColumnsInBoardQuery(boardId);
   const [isNewCardModalOpen, setIsNewCardModalOpen] = useState(false);
+
   const handleCloseNewCardModal = () => {
     setIsNewCardModalOpen(!isNewCardModalOpen);
   };
@@ -34,7 +35,7 @@ export function Board({ boardId }: IBoardProps) {
         <div className="board__container row flex-row flex-nowrap mt-4 pb-4 pt-2">
           {isLoading && <Loading />}
           {cardsData?.map((card) => (
-            <Card title={card.title} cardId={card._id} key={card._id} />
+            <Card title={card.title} cardId={card._id} boardId={boardId} key={card._id} />
           ))}
           <div
             className="board__card card-btn"
