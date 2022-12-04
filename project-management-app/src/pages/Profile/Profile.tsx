@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Container from 'react-bootstrap/Container';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { decodeToken } from 'react-jwt';
+
+import Container from 'react-bootstrap/Container';
 import { Loading } from 'components/Loading/Loading';
 import { useUpdateUserByIdMutation } from 'services/kanbanApiUsers';
-import { decodeToken } from 'react-jwt';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { RequestErrorInterface } from 'types/kanbanApiTypes';
@@ -35,7 +36,7 @@ export function Profile() {
     });
   };
 
-  const handleCloseSuccessErrorModal = () => {
+  const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false);
   };
 
@@ -46,11 +47,7 @@ export function Profile() {
   return (
     <Container>
       <h2 className="main__title">Edit Profile</h2>
-      <ModalWindow
-        show={isSuccessModalOpen}
-        onHide={handleCloseSuccessErrorModal}
-        title={'Success'}
-      >
+      <ModalWindow show={isSuccessModalOpen} onHide={handleCloseSuccessModal} title={'Success'}>
         <p>User data has changed</p>
       </ModalWindow>
       <ModalWindow show={isErrorModalOpen} onHide={handleCloseErrorModal} title={'Error'}>

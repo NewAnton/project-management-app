@@ -1,10 +1,11 @@
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
 import { Loading } from 'components/Loading/Loading';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { useActions } from 'hooks/useActions';
-import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/esm/Container';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useAuthSignInQuery } from 'services/kanbanApiAuth';
 import { SignInRequest, RequestErrorInterface } from 'types/kanbanApiTypes';
 
@@ -29,7 +30,7 @@ export function SignIn() {
     setSignInData({ login: data.login, password: data.password });
   };
 
-  const handleCloseSuccessErrorModal = () => {
+  const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false);
     navigate('/');
   };
@@ -47,11 +48,7 @@ export function SignIn() {
   return (
     <Container>
       <h2 className="main__title">Sign In</h2>
-      <ModalWindow
-        show={isSuccessModalOpen}
-        onHide={handleCloseSuccessErrorModal}
-        title={'Success'}
-      >
+      <ModalWindow show={isSuccessModalOpen} onHide={handleCloseSuccessModal} title={'Success'}>
         <p>Successfully sign in</p>
       </ModalWindow>
       <ModalWindow show={isErrorModalOpen} onHide={handleCloseErrorModal} title={'Error'}>

@@ -1,8 +1,10 @@
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
 import { Loading } from 'components/Loading/Loading';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
-import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/esm/Container';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAuthSignUpMutation } from 'services/kanbanApiAuth';
 import { RequestErrorInterface, SignUpRequest } from 'types/kanbanApiTypes';
 
@@ -10,16 +12,18 @@ export function SignUp() {
   const [signUpRequest, signUpResponse] = useAuthSignUpMutation();
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  console.log(signUpResponse);
+  const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<SignUpRequest>();
 
   const onSubmitHandler: SubmitHandler<SignUpRequest> = (data) => {
     signUpRequest({ name: data.name, login: data.login, password: data.password });
   };
+  console.log(signUpResponse);
 
-  const handleCloseSuccessErrorModal = () => {
+  const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false);
+    navigate('/sign-in');
   };
 
   const handleCloseErrorModal = () => {
@@ -34,11 +38,7 @@ export function SignUp() {
   return (
     <Container>
       <h2 className="main__title">Sign Up</h2>
-      <ModalWindow
-        show={isSuccessModalOpen}
-        onHide={handleCloseSuccessErrorModal}
-        title={'Success'}
-      >
+      <ModalWindow show={isSuccessModalOpen} onHide={handleCloseSuccessModal} title={'Success'}>
         <p>New User created</p>
       </ModalWindow>
       <ModalWindow show={isErrorModalOpen} onHide={handleCloseErrorModal} title={'Error'}>
