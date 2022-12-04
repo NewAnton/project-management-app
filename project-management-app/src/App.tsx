@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import React from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
 
 import { Navigation } from './components/Navigation/Navigation';
 import { Main } from 'pages/Main/Main';
@@ -12,14 +12,23 @@ import { Footer } from 'components/Footer/Footer';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './App.scss';
+import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
 
 export function App() {
   const { boardID } = useTypedSelector((state) => state.boardID);
+  const { token } = useTypedSelector((state) => state.globalState);
+  const navigate = useNavigate();
+
+  const isTokenExpired = useMemo(() => checkIsTokenExpired(token), [token]);
+
+  useEffect(() => {
+    navigate('/');
+  }, [isTokenExpired]);
 
   return (
     <>
       <header className="header">
-        <Navigation />
+        <Navigation isTokenExpired={isTokenExpired} />
       </header>
       <main className="main">
         <Routes>

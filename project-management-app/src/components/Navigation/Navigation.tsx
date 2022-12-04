@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -16,20 +16,19 @@ import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { SignUpForm } from 'components/SignUpForm/SignUpForm';
 import { SignInForm } from 'components/SignInForm/SignInForm';
 import { useActions } from 'hooks/useActions';
-import { useTypedSelector } from 'hooks/useTypedSelector';
-import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
 
 import './Navigation.scss';
 
-export function Navigation() {
+interface NavigationProps {
+  isTokenExpired: boolean;
+}
+
+export function Navigation({ isTokenExpired }: NavigationProps) {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
   const [language, setLanguage] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const { setToken } = useActions();
-  const { token } = useTypedSelector((state) => state.globalState);
-
-  const isTokenExpired = useMemo(() => checkIsTokenExpired(token), [token]);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
