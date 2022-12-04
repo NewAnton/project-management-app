@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
 import { PrevTask } from 'components/PrevTask/PrevTask';
-import { useGetTasksInColumnQuery } from 'services/kanbanApiTasks';
+import { useGetTasksInColumnQuery, useUpdateSetOfTasksMutation } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
@@ -29,33 +29,38 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     columnId: cardId,
   });
   const [arrayOfTask, setArrayOfTask] = useState<Task[]>([]);
+  const [taskOrder, setTaskOrder] = useState(0);
   const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
-  const [currentTask, setCurrentTask] = useState<Task | null>(null);
+  const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
   const [currentCard, setCurrentCard] = useState<Column | null>(null);
   const [deleteCard] = useDeleteColumnByIdMutation();
   const [deleteTask] = useDeleteTasksByIdMutation();
+  const [changeOrderAndCardOfTask] = useUpdateSetOfTasksMutation();
 
   useEffect(() => {
     if (tasksData !== undefined) {
-      if (tasksData?.length > 1) {
+      if (tasksData?.length > 0) {
         setArrayOfTask([...tasksData].sort(sortByField('order')));
+        setTaskOrder(tasksData[tasksData.length - 1].order + 1);
       } else {
         setArrayOfTask(tasksData);
       }
-      console.log(arrayOfTask);
+      // if (tasksData?.length > 0) {
+      //   setTaskOrder(tasksData[tasksData.length - 1].order + 1);
+      // }
+      // setArrayOfTask(tasksData);
     }
+    console.log('fdf');
   }, [tasksData]);
 
   const handleCloseNewTaskModal = () => {
     setisNewTaskModalOpen(!isNewTaskModalOpen);
   };
-  // console.log('cc', currentCard?._id);
 
   const handleclick = (event: React.MouseEvent) => {
     if ((event.target as Element).closest('.card__delete')) {
       deleteCard({ boardId: boardID, columnId: cardId });
     }
-    // console.log(tasksData);
   };
 
   function dragStartHandler(
@@ -65,7 +70,6 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
   ): void {
     setCurrentTask(taskCard);
     setCurrentCard(columnCard);
-    console.log(currentTask);
   }
 
   function dragLeaveHandler(e: React.DragEvent<HTMLElement>): void {
@@ -92,30 +96,66 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
 
   function dropHandler(e: React.DragEvent<HTMLElement>, taskCard: Task, columnCard: Column): void {
     e.preventDefault();
-    // console.log(tasksData);
-    const id = currentCard?._id;
-    // console.log('dropCurr', id);
-    // console.log('drop', columnCard._id);
-    // if (currentTask) {
-    //   console.log(currentTask);
-    // }
-    // if (currentCard?._id !== columnCard._id) {
-    //   console.log(currentCard?._id);
-    //   console.log(columnCard._id);
-    // } else if (currentCard?._id === columnCard._id) {
-    //   console.log('ff');
-    //   console.log(currentCard?._id);
-    //   console.log(columnCard._id);
-    // }
+    const tempTasksList = [...arrayOfTask];
+    if (currentTask) {
+      const currentIndex = tempTasksList.indexOf(currentTask);
+      tempTasksList.splice(currentIndex, 1);
+      const dropIndex = tempTasksList.indexOf(taskCard);
+      tempTasksList.splice(dropIndex, 0, currentTask);
+      const newTaskList = tempTasksList.map((task, index) => ({
+        ...task,
+        order: index,
+      }));
+      const arrayForServer = newTaskList.map((task) => ({
+        _id: task._id,
+        order: task.order,
+        columnId: columnCard._id,
+      }));
+      changeOrderAndCardOfTask(arrayForServer);
+      setArrayOfTask(newTaskList);
+    }
 
-    // (e.target as HTMLElement).style.background = 'var(--secondary-color)';
+    // setArrayOfTask((prev) => prev.filter((task) => task !== currentTask));
+    // const dropIndex = arrayOfTask.indexOf(taskCard);
+    // arrayOfTask.splice(dropIndex + 1, 0, currentTask);
+
+    // setArrayOfTask(
+    //   arrayOfTask.map((task) => {
+    //     if (task.order === taskCard.order) {
+    //       return { ...task, order: taskCard.order };
+    //     }
+    //   })
+    // );
+
+    // const arr = arrayOfTask.map((task) => {
+    //   if (task.order === taskCard.order) {
+    //     return { ...task, order: currentTask?.order };
+    //   }
+    //   if (task.order === currentTask?.order) {
+    //     return { ...task, order: taskCard.order };
+    //   }
+    //   return task;
+    // });
+
+    // const sortArr = [...arr].sort(sortField);
+
+    // setArrayOfTask(sortArr);
   }
+
+  // console.log('tasksData', tasksData);
+  // console.log('arrayOfTask', arrayOfTask);
+
+  // const sortField = (a: Task, b: Task) => {
+  //   if (a.order !== undefined && b.order !== undefined) {
+  //     return a.order > b.order ? 1 : -1;
+  //   }
+  // };
 
   return (
     <div className="board__card" onClick={handleclick}>
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
-          {title} <span className="board__card-count">({tasksData?.length} Tasks)</span>
+          {title} <span className="board__card-count">({arrayOfTask?.length} Tasks)</span>
         </div>
         <FontAwesomeIcon className="prevcard__header-icon card__delete mr-1" icon={faTrash} />
       </div>
@@ -161,7 +201,7 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
           showDescription={true}
           isTask={true}
           isCard={false}
-          arrLength={tasksData?.length}
+          arrLength={taskOrder}
         />
       </ModalWindow>
     </div>

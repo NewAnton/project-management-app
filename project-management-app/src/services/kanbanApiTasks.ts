@@ -87,6 +87,7 @@ export const kanbanApiTasks = kanbanApi.injectEndpoints({
         method: 'PATCH',
         body: payload,
       }),
+      invalidatesTags: ['TaskTag'],
     }),
     getTasksByBoardId: builder.query<Task[], { boardId: string }>({
       query: (payload) => ({
