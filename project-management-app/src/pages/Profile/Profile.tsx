@@ -59,9 +59,7 @@ export function Profile() {
         </p>
       </ModalWindow>
       {getNewUserInfo.isLoading ? (
-        <div className="loading-wrapper">
-          <Loading />
-        </div>
+        <Loading />
       ) : (
         <form className="profile-form" onSubmit={handleSubmit(onSubmitHandler)}>
           {/* <h1 className="profile-form__h1 h1"> Sign Up</h1> */}

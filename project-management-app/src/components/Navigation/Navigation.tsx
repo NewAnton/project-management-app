@@ -12,8 +12,6 @@ import {
   faGlobe,
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
-import { ModalWindow } from 'components/ModalWindow/ModalWindow';
-import { SignUpForm } from 'components/SignUpForm/SignUpForm';
 import { useActions } from 'hooks/useActions';
 
 import './Navigation.scss';
@@ -25,7 +23,6 @@ interface NavigationProps {
 export function Navigation({ isTokenExpired }: NavigationProps) {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
   const [language, setLanguage] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const { setToken } = useActions();
 
   const changeNavBarTheme = () => {
@@ -38,10 +35,6 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
 
   const changeLanguage = () => {
     setLanguage(!language);
-  };
-
-  const handleCloseSignUpModal = () => {
-    setIsSignUpModalOpen(!isSignUpModalOpen);
   };
 
   return (
@@ -101,38 +94,8 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
                     Sign In
                   </Nav.Link>
                 </Nav>
-                {/* <button
-                  type="button"
-                  className="navbar__btn"
-                  onClick={() => {
-                    setIsSignUpModalOpen(true);
-                  }}
-                >
-                  <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
-                  Sign up
-                </button>
-                <button
-                  type="button"
-                  className="navbar__btn"
-                  onClick={() => {
-                    setIsSignInModalOpen(true);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    className="element__star mr-1"
-                    icon={faRightFromBracket}
-                    size="xs"
-                  />
-                  Sign in
-                </button> */}
               </>
             )}
-            <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
-              <SignUpForm onSubmitAction={handleCloseSignUpModal} />
-            </ModalWindow>
-            {/* <ModalWindow show={isSignInModalOpen} onHide={handleCloseSignInModal} title="Sign In">
-              <SignInForm onSubmitAction={handleCloseSignInModal} />
-            </ModalWindow> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

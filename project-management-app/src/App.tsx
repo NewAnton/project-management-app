@@ -12,6 +12,7 @@ import { Footer } from 'components/Footer/Footer';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
 import { SignIn } from 'pages/SignIn/SignIn';
+import { SignUp } from 'pages/SignUp/SignUp';
 
 import './App.scss';
 
@@ -39,6 +40,7 @@ export function App() {
           <Route path="/board" element={<Board boardId={boardID} />} />
           <Route path="/task" element={<Task />} />
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>
       </main>
