@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -29,7 +29,7 @@ export function Navigation() {
   const { setToken } = useActions();
   const { token } = useTypedSelector((state) => state.globalState);
 
-  const isTokenExpired = checkIsTokenExpired(token);
+  const isTokenExpired = useMemo(() => checkIsTokenExpired(token), [token]);
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
