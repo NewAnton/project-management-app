@@ -10,9 +10,10 @@ import { Task } from 'components/Task/Task';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
 import { Footer } from 'components/Footer/Footer';
 import { useTypedSelector } from 'hooks/useTypedSelector';
+import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
+import { SignIn } from 'pages/SignIn/SignIn';
 
 import './App.scss';
-import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
 
 export function App() {
   const { boardID } = useTypedSelector((state) => state.boardID);
@@ -22,7 +23,7 @@ export function App() {
   const isTokenExpired = useMemo(() => checkIsTokenExpired(token), [token]);
 
   useEffect(() => {
-    navigate('/');
+    if (isTokenExpired) navigate('/');
   }, [isTokenExpired]);
 
   return (
@@ -37,6 +38,7 @@ export function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/board" element={<Board boardId={boardID} />} />
           <Route path="/task" element={<Task />} />
+          <Route path="/sign-in" element={<SignIn />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>
       </main>

@@ -14,7 +14,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { SignUpForm } from 'components/SignUpForm/SignUpForm';
-import { SignInForm } from 'components/SignInForm/SignInForm';
 import { useActions } from 'hooks/useActions';
 
 import './Navigation.scss';
@@ -27,7 +26,6 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
   const [language, setLanguage] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const { setToken } = useActions();
 
   const changeNavBarTheme = () => {
@@ -44,10 +42,6 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
 
   const handleCloseSignUpModal = () => {
     setIsSignUpModalOpen(!isSignUpModalOpen);
-  };
-
-  const handleCloseSignInModal = () => {
-    setIsSignInModalOpen(!isSignInModalOpen);
   };
 
   return (
@@ -97,7 +91,17 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
               </button>
             ) : (
               <>
-                <button
+                <Nav className="me-auto navbar__link-container">
+                  <Nav.Link className="navbar__link" as={Link} to="/sign-up">
+                    <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
+                    Sign up
+                  </Nav.Link>
+                  <Nav.Link className="navbar__link" as={Link} to="/sign-in">
+                    <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
+                    Sign In
+                  </Nav.Link>
+                </Nav>
+                {/* <button
                   type="button"
                   className="navbar__btn"
                   onClick={() => {
@@ -120,15 +124,15 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
                     size="xs"
                   />
                   Sign in
-                </button>
+                </button> */}
               </>
             )}
             <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
               <SignUpForm onSubmitAction={handleCloseSignUpModal} />
             </ModalWindow>
-            <ModalWindow show={isSignInModalOpen} onHide={handleCloseSignInModal} title="Sign In">
+            {/* <ModalWindow show={isSignInModalOpen} onHide={handleCloseSignInModal} title="Sign In">
               <SignInForm onSubmitAction={handleCloseSignInModal} />
-            </ModalWindow>
+            </ModalWindow> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

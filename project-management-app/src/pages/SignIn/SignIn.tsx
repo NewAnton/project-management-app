@@ -1,38 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { SignInRequest } from 'types/kanbanApiTypes';
-import { useAuthSignInQuery } from 'services/kanbanApiAuth';
-import { useActions } from 'hooks/useActions';
 import { Loading } from 'components/Loading/Loading';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { useActions } from 'hooks/useActions';
+import React, { useEffect, useState } from 'react';
+import Container from 'react-bootstrap/esm/Container';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useAuthSignInQuery } from 'services/kanbanApiAuth';
+import { SignInRequest, RequestErrorInterface } from 'types/kanbanApiTypes';
 
-import './SignInForm.scss';
-
-interface SignUpForm {
-  onSubmitAction: () => void;
-}
-
-export function SignInForm({ onSubmitAction }: SignUpForm) {
+export function SignIn() {
   const [signInData, setSignInData] = useState({ login: '', password: '' });
   const { setToken } = useActions();
   const { register, handleSubmit } = useForm<SignInRequest>();
-  const { data, isLoading } = useAuthSignInQuery(
+  const { data, isLoading, error, isSuccess, isError } = useAuthSignInQuery(
     { login: signInData.login, password: signInData.password },
     { skip: Boolean(!signInData.login && !signInData.password) }
   );
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsErrorModalOpen(isError);
+    setIsSuccessModalOpen(isSuccess);
+  }, [isError, isSuccess]);
 
   const onSubmitHandler: SubmitHandler<SignInRequest> = (data) => {
     setSignInData({ login: data.login, password: data.password });
   };
 
+  const handleCloseSuccessErrorModal = () => {
+    setIsSuccessModalOpen(false);
+    navigate('/');
+  };
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
+
   useEffect(() => {
     if (data) {
       setToken(data.token);
-      onSubmitAction();
     }
   }, [data]);
 
   return (
-    <>
+    <Container>
+      <h2 className="main__title">Sign In</h2>
+      <ModalWindow
+        show={isSuccessModalOpen}
+        onHide={handleCloseSuccessErrorModal}
+        title={'Success'}
+      >
+        <p>Successfully sign in</p>
+      </ModalWindow>
+      <ModalWindow show={isErrorModalOpen} onHide={handleCloseErrorModal} title={'Error'}>
+        <p>{error && (error as RequestErrorInterface).data.message}</p>
+      </ModalWindow>
       {isLoading ? (
         <div className="loading-wrapper">
           <Loading />
@@ -64,6 +88,6 @@ export function SignInForm({ onSubmitAction }: SignUpForm) {
           </button>
         </form>
       )}
-    </>
+    </Container>
   );
 }
