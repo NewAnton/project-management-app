@@ -19,7 +19,6 @@ export function SignUp() {
   const onSubmitHandler: SubmitHandler<SignUpRequest> = (data) => {
     signUpRequest({ name: data.name, login: data.login, password: data.password });
   };
-  console.log(signUpResponse);
 
   const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false);
