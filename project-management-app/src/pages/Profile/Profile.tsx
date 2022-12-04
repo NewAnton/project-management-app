@@ -9,6 +9,7 @@ import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { RequestErrorInterface } from 'types/kanbanApiTypes';
 import { DecodedTokenInterface } from 'types/DecodedTokenInterface';
+import { DeleteUser } from 'components/DeleteUser/DeleteUser';
 
 export function Profile() {
   interface updateUserInfo {
@@ -102,6 +103,7 @@ export function Profile() {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
+          <DeleteUser />
         </form>
       )}
     </Container>
