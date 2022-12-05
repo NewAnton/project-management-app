@@ -38,7 +38,7 @@ export function BoardList() {
               className="board-list__link"
               key={board._id}
               as={Link}
-              to="/board"
+              to={`/board/${board._id}`}
             >
               <PrevBoard
                 title={JSON.parse(board.title).title}

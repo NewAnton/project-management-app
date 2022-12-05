@@ -5,7 +5,7 @@ import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery, useUpdateSetOfTasksMutation } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
-import { Task, Column } from 'types/kanbanApiTypes';
+import { Task } from 'types/kanbanApiTypes';
 import { sortByField } from 'services/sortArrayByFieldOfObj';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
@@ -18,14 +18,13 @@ import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
 interface ICardProps {
   title: string;
   cardId: string;
-  columnCard: Column;
+  boardId: string;
 }
 
-export function Card({ title, cardId }: ICardProps) {
-  const { boardID } = useTypedSelector((state) => state.boardID);
+export function Card({ title, cardId, boardId }: ICardProps) {
   const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { data: tasksData } = useGetTasksInColumnQuery({
-    boardId: boardID,
+    boardId: boardId,
     columnId: cardId,
   });
   const [arrayOfTask, setArrayOfTask] = useState<Task[]>([]);
@@ -89,7 +88,7 @@ export function Card({ title, cardId }: ICardProps) {
 
   const handleDeleteCardButton = (event: React.MouseEvent) => {
     if ((event.target as Element).closest('.card__delete')) {
-      deleteCard({ boardId: boardID, columnId: cardId });
+      deleteCard({ boardId: boardId, columnId: cardId });
     }
   };
 
@@ -122,6 +121,7 @@ export function Card({ title, cardId }: ICardProps) {
                         description={task.description}
                         cardId={cardId}
                         taskId={task._id}
+                        boardId={boardId}
                       />
                     </div>
                   )}
@@ -150,12 +150,12 @@ export function Card({ title, cardId }: ICardProps) {
           title={languageChoice ? 'Name of Task' : 'Название Задачи'}
           description={languageChoice ? 'Add description' : 'Добавьте описание'}
           onHideModal={handleCloseNewTaskModal}
-          boardId={boardID}
+          boardId={boardId}
           cardId={cardId}
           showDescription={true}
           isTask={true}
           isCard={false}
-          arrLength={arrayOfTask.length} //!!!
+          arrLength={arrayOfTask.length}
         />
       </ModalWindow>
     </div>

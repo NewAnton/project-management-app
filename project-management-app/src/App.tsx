@@ -18,7 +18,6 @@ import './App.scss';
 import { NewBoard } from 'components/NewBoard/NewBoard';
 
 export function App() {
-  const { boardID } = useTypedSelector((state) => state.boardID);
   const { token } = useTypedSelector((state) => state.globalState);
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ export function App() {
           <Route path="/new-board" element={<NewBoard />} />
           <Route path="/board-list" element={<BoardList />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/board" element={<Board boardId={boardID} />} />
+          <Route path="/board/:id" element={<Board />} />
           <Route path="/task" element={<Task />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
