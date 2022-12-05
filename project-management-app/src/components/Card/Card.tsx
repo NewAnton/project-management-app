@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery, useUpdateSetOfTasksMutation } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
 import { Task, Column } from 'types/kanbanApiTypes';
 import { sortByField } from 'services/sortArrayByFieldOfObj';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
 
 import { Droppable, Draggable, DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
 
 interface ICardProps {
   title: string;
@@ -18,7 +21,7 @@ interface ICardProps {
   columnCard: Column;
 }
 
-export function Card({ title, cardId, columnCard }: ICardProps) {
+export function Card({ title, cardId }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
   const { data: tasksData } = useGetTasksInColumnQuery({
     boardId: boardID,
@@ -28,7 +31,9 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
   const [updatedArrayOfTask, setUpdatedArrayOfTask] = useState<
     { _id: string; order: number; columnId: string }[]
   >([]);
-  const [changeOrder, newArrayOfTask] = useUpdateSetOfTasksMutation();
+  const [changeOrderRequest, newArrayOfTask] = useUpdateSetOfTasksMutation();
+  const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
+  const [deleteCard] = useDeleteColumnByIdMutation();
 
   useEffect(() => {
     if (tasksData !== undefined) {
@@ -41,23 +46,31 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
   }, [tasksData]);
 
   useEffect(() => {
-    if (updatedArrayOfTask.length) changeOrder(updatedArrayOfTask);
+    if (updatedArrayOfTask.length) changeOrderRequest(updatedArrayOfTask);
   }, [updatedArrayOfTask]);
 
   useEffect(() => {
     if (newArrayOfTask.isSuccess) {
-      setArrayOfTask(newArrayOfTask.data);
+      setArrayOfTask([...newArrayOfTask.data].sort(sortByField('order')));
     }
   }, [newArrayOfTask]);
 
   const handleOnDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
-    //draggableId - column id
+    const { destination, source } = result;
     if (!destination) {
       return;
     }
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
+
+    setArrayOfTask(() => {
+      const newArrayOfTask = arrayOfTask.map((task) => {
+        return { ...task };
+      });
+      newArrayOfTask[source.index].order = destination.index + 1;
+      newArrayOfTask[destination.index].order = source.index + 1;
+      return newArrayOfTask.sort(sortByField('order'));
+    });
 
     setUpdatedArrayOfTask(() => {
       const newArrayOfTask = arrayOfTask.map((task) => {
@@ -67,18 +80,20 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
       newArrayOfTask[destination.index].order = source.index + 1;
       return newArrayOfTask;
     });
-    setArrayOfTask(() => {
-      const newArrayOfTask = arrayOfTask.map((task) => {
-        return { ...task };
-      });
-      newArrayOfTask[source.index].order = destination.index + 1;
-      newArrayOfTask[destination.index].order = source.index + 1;
-      return newArrayOfTask;
-    });
+  };
+
+  const handleCloseNewTaskModal = () => {
+    setIsNewTaskModalOpen(!isNewTaskModalOpen);
+  };
+
+  const handleDeleteCardButton = (event: React.MouseEvent) => {
+    if ((event.target as Element).closest('.card__delete')) {
+      deleteCard({ boardId: boardID, columnId: cardId });
+    }
   };
 
   return (
-    <div className="board__card">
+    <div className="board__card" onClick={handleDeleteCardButton}>
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
           {title} <span className="board__card-count">({arrayOfTask?.length} Tasks)</span>
@@ -116,6 +131,28 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
           )}
         </Droppable>
       </DragDropContext>
+      <div
+        className="board__card-footer"
+        onClick={() => {
+          setIsNewTaskModalOpen(true);
+        }}
+      >
+        <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
+        Add Task
+      </div>
+      <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
+        <ModalCreateEl
+          title="Name of Task"
+          description="Add description"
+          onHideModal={handleCloseNewTaskModal}
+          boardId={boardID}
+          cardId={cardId}
+          showDescription={true}
+          isTask={true}
+          isCard={false}
+          arrLength={arrayOfTask.length} //!!!
+        />
+      </ModalWindow>
     </div>
   );
 }

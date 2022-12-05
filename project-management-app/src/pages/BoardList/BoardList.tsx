@@ -3,16 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
-import {
-  useCreateBoardMutation,
-  useDeleteBoardByIdMutation,
-  useGetAllBoardsQuery,
-} from 'services/kanbanApiBoards';
-import { useGetColumnsInBoardQuery } from 'services/kanbanApiColumns';
+import { useCreateBoardMutation, useGetAllBoardsQuery } from 'services/kanbanApiBoards';
 import { PrevBoard } from 'components/PrevBoard/PrevBoard';
 import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
 import { Loading } from 'components/Loading/Loading';
-import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
 import { useActions } from 'hooks/useActions';
 
 import './BoardList.scss';
@@ -20,15 +14,7 @@ import './BoardList.scss';
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
-
-  const { data: columnsData } = useGetColumnsInBoardQuery('638601fb7d51b3a61a8eb7c9');
-  const [addColumn] = useCreateColumnInBoardMutation();
-  const [deleteBoard] = useDeleteBoardByIdMutation();
   const [createBoard] = useCreateBoardMutation();
-
-  const funcDel = () => {
-    deleteBoard('638601247d51b3a61a8eb7c5');
-  };
 
   const funcCreate = () => {
     createBoard({
@@ -37,8 +23,6 @@ export function BoardList() {
       users: ['only me'],
     });
   };
-
-  // console.log(columnsData);
 
   const clickHandlerBoard = (boardId: string) => {
     changeBoardID(boardId);
