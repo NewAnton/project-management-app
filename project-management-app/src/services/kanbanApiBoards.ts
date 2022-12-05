@@ -8,6 +8,7 @@ export const kanbanApiBoards = kanbanApi.injectEndpoints({
         url: `/boards`,
         method: 'GET',
       }),
+      providesTags: ['BoardTag'],
     }),
     createBoard: builder.mutation<Board, { title: string; owner: string; users: string[] }>({
       query: (payload) => ({
@@ -15,6 +16,7 @@ export const kanbanApiBoards = kanbanApi.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['BoardTag'],
     }),
     getBoardById: builder.query<Board, string>({
       query: (boardId) => ({
@@ -22,18 +24,23 @@ export const kanbanApiBoards = kanbanApi.injectEndpoints({
         method: 'GET',
       }),
     }),
-    updateBoardById: builder.mutation<Board, Board>({
+    updateBoardById: builder.mutation<
+      Board,
+      { boardId: string; title: string; owner: string; users: string[] }
+    >({
       query: (payload) => ({
-        url: `/boards/${payload._id}`,
+        url: `/boards/${payload.boardId}`,
         method: 'PUT',
-        body: payload,
+        body: { title: payload.title, owner: payload.owner, users: payload.users },
       }),
+      invalidatesTags: ['BoardTag'],
     }),
     deleteBoardById: builder.mutation<Board, string>({
       query: (boardId) => ({
         url: `/boards/${boardId}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['BoardTag'],
     }),
     getBoardsByIdsList: builder.query<Board[], string[]>({
       query: (payload) => ({

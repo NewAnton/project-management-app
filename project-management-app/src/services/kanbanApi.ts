@@ -13,6 +13,6 @@ export const kanbanApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['TaskTag', 'ColumnTag'],
+  tagTypes: ['TaskTag', 'ColumnTag', 'BoardTag'],
   endpoints: () => ({}),
 });

@@ -68,7 +68,10 @@ export function NewBoardFormModal() {
           placeholder="Board name"
           {...register('name', {
             required: 'This field is required',
-            maxLength: 66,
+            maxLength: {
+              value: 15,
+              message: 'Max length is 15',
+            },
             minLength: {
               value: 2,
               message: 'Min length is 2',

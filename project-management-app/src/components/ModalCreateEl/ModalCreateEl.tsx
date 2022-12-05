@@ -2,9 +2,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { ErrorTextMessage } from 'components/ErrorTextMessage/ErrorTextMessage';
-import { CreateEl, Task, Column } from 'types/kanbanApiTypes';
+import { CreateEl, Task, Column, Board } from 'types/kanbanApiTypes';
 import { useCreateTaskInColumnMutation } from 'services/kanbanApiTasks';
 import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
+import { useGetBoardByIdQuery, useUpdateBoardByIdMutation } from 'services/kanbanApiBoards';
 
 import './ModalCreateEl.scss';
 
@@ -17,6 +18,7 @@ interface ICreateElForm {
   showDescription: boolean;
   isTask: boolean;
   isCard: boolean;
+  isBoard?: boolean;
 }
 
 export function ModalCreateEl({
@@ -28,15 +30,20 @@ export function ModalCreateEl({
   showDescription,
   isTask,
   isCard,
+  isBoard,
 }: ICreateElForm) {
   const [createTask] = useCreateTaskInColumnMutation<Task>();
   const [createCard] = useCreateColumnInBoardMutation<Column>();
+  const [updateBoard] = useUpdateBoardByIdMutation<Board>();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateEl>();
+
+  const currentBoard = useGetBoardByIdQuery(boardId);
+  const currentBoardId = currentBoard.currentData?._id ? currentBoard.currentData._id : '';
 
   const onSubmitHandler = (data: CreateEl) => {
     onHideModal();
@@ -58,6 +65,14 @@ export function ModalCreateEl({
         order: 0,
       });
       console.log('isCard');
+    } else if (isBoard) {
+      updateBoard({
+        boardId: currentBoardId,
+        title: JSON.stringify({ title: data.title, description: data.description }),
+        owner: '123qwerty',
+        users: ['123qwerty'],
+      });
+      console.log('isBoard', boardId);
     }
     console.log(data);
   };
@@ -68,21 +83,30 @@ export function ModalCreateEl({
         <label className="d-flex flex-column form__label">
           <span>{title}:</span>
           <input
+            defaultValue={
+              isBoard && currentBoard.currentData
+                ? JSON.parse(currentBoard.currentData?.title).title
+                : ''
+            }
             className="form__input"
             type="text"
             autoFocus
             {...register('title', {
               required: {
                 value: true,
-                message: 'Task title required!',
+                message: isBoard ? 'Board title required!' : 'Task title required!',
               },
               minLength: {
                 value: 2,
-                message: 'Task title must contain more than 1 letter!',
+                message: isBoard
+                  ? 'Board title must contain more than 1 letter!'
+                  : 'Task title must contain more than 1 letter!',
               },
               maxLength: {
                 value: 15,
-                message: 'Task title must contain less than 15 letters!',
+                message: isBoard
+                  ? 'Board title must contain less than 15 letters!'
+                  : 'Task title must contain less than 15 letters!',
               },
             })}
           />
@@ -96,11 +120,16 @@ export function ModalCreateEl({
           <label className="d-flex flex-column form__label">
             <span>{description}:</span>
             <input
+              defaultValue={
+                isBoard && currentBoard.currentData
+                  ? JSON.parse(currentBoard.currentData?.title).description
+                  : ''
+              }
               className="form__input"
               type="text"
               {...register('description', {
                 required: {
-                  value: true,
+                  value: isBoard ? false : true,
                   message: 'Task description required!',
                 },
                 minLength: {

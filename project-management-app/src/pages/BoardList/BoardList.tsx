@@ -18,6 +18,8 @@ import { useActions } from 'hooks/useActions';
 import './BoardList.scss';
 
 export function BoardList() {
+  // const [deleteBoardById] = useDeleteBoardByIdMutation();
+  // deleteBoardById('638692d87d51b3a61a8eb91e');
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
 
@@ -65,6 +67,7 @@ export function BoardList() {
               <PrevBoard
                 title={JSON.parse(board.title).title}
                 description={JSON.parse(board.title).description}
+                boardId={board._id}
               />
             </Nav.Link>
           ))}
