@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -12,19 +12,19 @@ import {
   faGlobe,
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
-import { ModalWindow } from 'components/ModalWindow/ModalWindow';
-import { SignUpForm } from 'components/SignUpForm/SignUpForm';
-import { SignInForm } from 'components/SignInForm/SignInForm';
-import { authSignOut } from 'services/authSignOut';
-import { getToken } from 'services/getToken';
+import { useActions } from 'hooks/useActions';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Navigation.scss';
 
-export function Navigation() {
+interface NavigationProps {
+  isTokenExpired: boolean;
+}
+
+export function Navigation({ isTokenExpired }: NavigationProps) {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
-  const [language, setLanguage] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
+  const { setToken, changeLanguage } = useActions();
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -34,90 +34,67 @@ export function Navigation() {
 
   window.addEventListener('scroll', changeNavBarTheme);
 
-  const changeLanguage = () => {
-    setLanguage(!language);
-  };
-
-  const handleCloseSignUpModal = () => {
-    setIsSignUpModalOpen(!isSignUpModalOpen);
-  };
-
-  const handleCloseSignInModal = () => {
-    setIsSignInModalOpen(!isSignInModalOpen);
+  const changeLanguageFunc = () => {
+    changeLanguage(!languageChoice);
   };
 
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark" className={navBarTheme}>
       <Container>
         <Navbar.Brand className="font-weight-bold navbar__logo" href="/">
-          Project Management App
+          {languageChoice ? 'Project Management App' : 'Приложение для управления проектами'}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
-          <Nav className="me-auto navbar__link-container">
-            <Nav.Link className="navbar__link">
-              <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-              New Board
-            </Nav.Link>
-            <Nav.Link className="navbar__link" as={Link} to="/board-list">
-              <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
-              Boards
-            </Nav.Link>
-            <Nav.Link className="navbar__link" as={Link} to="/profile">
-              <FontAwesomeIcon className="mr-1" icon={faUser} size="xs" />
-              Edit Profile
-            </Nav.Link>
-          </Nav>
+          {!isTokenExpired && (
+            <Nav className="me-auto navbar__link-container">
+              <Nav.Link className="navbar__link" as={Link} to="/new-board">
+                <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
+                {languageChoice ? 'New Board' : 'Новая Доска'}
+              </Nav.Link>
+              <Nav.Link className="navbar__link" as={Link} to="/board-list">
+                <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
+                {languageChoice ? 'Boards' : 'Доски'}
+              </Nav.Link>
+              <Nav.Link className="navbar__link" as={Link} to="/profile">
+                <FontAwesomeIcon className="mr-1" icon={faUser} size="xs" />
+                {languageChoice ? 'Edit Profile' : 'Редактировать профиль'}
+              </Nav.Link>
+            </Nav>
+          )}
           <Nav className="navbar__btn-container">
-            <button type="button" className="navbar__btn" onClick={changeLanguage}>
+            <button type="button" className="navbar__btn" onClick={changeLanguageFunc}>
               <FontAwesomeIcon className="mr-1" icon={faGlobe} size="xs" />
-              {language ? 'Ru' : 'En'}
+              {languageChoice ? 'En' : 'Ru'}
             </button>
-            <button
-              type="button"
-              className="navbar__btn"
-              onClick={() => {
-                setIsSignUpModalOpen(true);
-              }}
-            >
-              <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
-              Sign up
-            </button>
-            <ModalWindow show={isSignUpModalOpen} onHide={handleCloseSignUpModal} title="Sign Up">
-              <SignUpForm />
-            </ModalWindow>
-            {getToken() ? (
-              <button type="button" className="navbar__btn" onClick={authSignOut}>
+            {!isTokenExpired ? (
+              <button
+                type="button"
+                className="navbar__btn"
+                onClick={() => {
+                  setToken('');
+                  localStorage.removeItem('token');
+                }}
+              >
                 <FontAwesomeIcon
                   className="element__star mr-1"
                   icon={faRightFromBracket}
                   size="xs"
                 />
-                Sign Out
+                {languageChoice ? 'Sign Out' : 'Выход'}
               </button>
             ) : (
               <>
-                <button
-                  type="button"
-                  className="navbar__btn"
-                  onClick={() => {
-                    setIsSignInModalOpen(true);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    className="element__star mr-1"
-                    icon={faRightFromBracket}
-                    size="xs"
-                  />
-                  Sign in
-                </button>
-                <ModalWindow
-                  show={isSignInModalOpen}
-                  onHide={handleCloseSignInModal}
-                  title="Sign In"
-                >
-                  <SignInForm />
-                </ModalWindow>
+                <Nav className="me-auto navbar__link-container">
+                  <Nav.Link className="navbar__link" as={Link} to="/sign-up">
+                    <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
+                    {languageChoice ? 'Sign up' : 'Зарегистрироваться'}
+                  </Nav.Link>
+                  <Nav.Link className="navbar__link" as={Link} to="/sign-in">
+                    <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
+                    {languageChoice ? ' Sign In' : 'Войти'}
+                  </Nav.Link>
+                </Nav>
               </>
             )}
           </Nav>

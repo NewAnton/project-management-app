@@ -13,6 +13,9 @@
   .board__card-header {
     color: var(--header-dark-bg);
     cursor: pointer;
+    .board__card-count{
+      color: var(--header-bg);
+    }
     .prevcard__header-icon {
       transition: 0.3s;
       &:hover {
@@ -32,6 +35,7 @@
     }
     .board__card-link {
       padding: 0;
+      outline-offset: -2rem;
     }
   }
   .board__card-footer {

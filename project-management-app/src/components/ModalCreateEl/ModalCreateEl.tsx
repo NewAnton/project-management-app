@@ -5,6 +5,7 @@ import { ErrorTextMessage } from 'components/ErrorTextMessage/ErrorTextMessage';
 import { CreateEl, Task, Column, Board } from 'types/kanbanApiTypes';
 import { useCreateTaskInColumnMutation } from 'services/kanbanApiTasks';
 import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 import { useGetBoardByIdQuery, useUpdateBoardByIdMutation } from 'services/kanbanApiBoards';
 
 import './ModalCreateEl.scss';
@@ -19,6 +20,7 @@ interface ICreateElForm {
   isTask: boolean;
   isCard: boolean;
   isBoard?: boolean;
+  arrLength?: number | undefined;
 }
 
 export function ModalCreateEl({
@@ -31,9 +33,11 @@ export function ModalCreateEl({
   isTask,
   isCard,
   isBoard,
+  arrLength,
 }: ICreateElForm) {
   const [createTask] = useCreateTaskInColumnMutation<Task>();
   const [createCard] = useCreateColumnInBoardMutation<Column>();
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const [updateBoard] = useUpdateBoardByIdMutation<Board>();
 
   const {
@@ -54,19 +58,17 @@ export function ModalCreateEl({
         boardId: boardId,
         columnId: cardId,
         title: data.title,
-        order: 0,
+        order: arrLength,
         description: data.description,
         userId: '0',
         users: ['string'],
       });
-      console.log('isTask');
     } else if (isCard) {
       createCard({
         boardId: boardId,
         title: data.title,
-        order: 0,
+        order: arrLength,
       });
-      console.log('isCard');
     } else if (isBoard) {
       updateBoard({
         boardId: currentBoardId,
@@ -74,9 +76,14 @@ export function ModalCreateEl({
         owner: currentBoardOwner,
         users: currentBoardUsers,
       });
-      console.log('isBoard', boardId);
+    } else if (isBoard) {
+      updateBoard({
+        boardId: currentBoardId,
+        title: JSON.stringify({ title: data.title, description: data.description }),
+        owner: currentBoardOwner,
+        users: currentBoardUsers,
+      });
     }
-    console.log(data);
   };
 
   return (
@@ -150,8 +157,12 @@ export function ModalCreateEl({
           </div>
         </div>
       )}
-      <button type="submit" className="btn btn-primary mt-2">
-        Submit
+      <button
+        type="submit"
+        style={{ width: '10rem', margin: '2rem auto 1rem auto', display: 'block' }}
+        className="btn btn-primary"
+      >
+        {languageChoice ? 'Submit' : 'Создать'}
       </button>
     </form>
   );

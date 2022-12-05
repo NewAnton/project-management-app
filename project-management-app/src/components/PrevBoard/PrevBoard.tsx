@@ -3,6 +3,8 @@ import Card from 'react-bootstrap/Card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { useTypedSelector } from 'hooks/useTypedSelector';
+
 import './PrevBoard.scss';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
@@ -19,6 +21,8 @@ export function PrevBoard({ title, description, boardId }: IPrevBoardProps) {
   const { changeBoardID } = useActions();
   const [isUpdateBoardModalOpen, setUpdateBoardModalOpen] = useState(false);
   const [deleteBoard] = useDeleteBoardByIdMutation();
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
+
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -39,11 +43,6 @@ export function PrevBoard({ title, description, boardId }: IPrevBoardProps) {
   const handleCloseUpdateBoardModal = () => {
     setUpdateBoardModalOpen(false);
   };
-
-  // const handleCard = (event: React.MouseEvent) => {
-  //   console.log('card');
-  //   console.log(event.target);
-  // };
 
   return (
     <Card bg="Light" text="dark" className="prevboard mb-4">
@@ -68,11 +67,15 @@ export function PrevBoard({ title, description, boardId }: IPrevBoardProps) {
               />
             </ModalWindow>
           </div>
-          <div className="prevboard__header-description">Edit</div>
+          <div className="prevboard__header-description">
+            {languageChoice ? 'Edit' : 'Редактировать'}
+          </div>
         </div>
         <div className="prevboard__header d-flex align-items-center" onClick={handleDelete}>
           <FontAwesomeIcon className="prevboard__header-icon mr-1" icon={faTrash} />
-          <div className="prevboard__header-description">Delete</div>
+          <div className="prevboard__header-description">
+            {languageChoice ? 'Delete' : 'Удалить'}
+          </div>
         </div>
       </Card.Header>
       <Card.Body>
