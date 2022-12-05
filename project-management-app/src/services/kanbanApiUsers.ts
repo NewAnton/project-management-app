@@ -1,4 +1,4 @@
-import { userInterface } from 'types/kanbanApiTypes';
+import { updateUserRequestInterface, userInterface } from 'types/kanbanApiTypes';
 import { kanbanApi } from './kanbanApi';
 
 export const kanbanApiUsers = kanbanApi.injectEndpoints({
@@ -15,10 +15,7 @@ export const kanbanApiUsers = kanbanApi.injectEndpoints({
         method: 'GET',
       }),
     }),
-    updateUserById: builder.mutation<
-      userInterface,
-      { userId: string; name: string; login: string; password: string }
-    >({
+    updateUserById: builder.mutation<userInterface, updateUserRequestInterface>({
       query: (payload) => ({
         url: `/users/${payload.userId}`,
         method: 'PUT',

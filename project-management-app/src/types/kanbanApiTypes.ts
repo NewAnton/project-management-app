@@ -25,6 +25,13 @@ export interface userInterface {
   login: string;
 }
 
+export interface updateUserRequestInterface {
+  userId: string;
+  name: string;
+  login: string;
+  password: string;
+}
+
 export interface Board {
   _id: string;
   title: string;
@@ -53,4 +60,8 @@ export interface Task {
 export interface CreateEl {
   title: string;
   description: string;
+}
+
+export interface RequestErrorInterface {
+  data: { statusCode: string; message: string };
 }

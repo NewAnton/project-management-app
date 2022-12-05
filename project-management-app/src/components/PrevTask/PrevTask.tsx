@@ -30,7 +30,7 @@ export function PrevTask({ title, description, cardId, taskId, boardId }: IPrevT
     <div className="prevTask__container" onClick={handleclick}>
       <div className="prevTask__header d-flex justify-content-between mb-1">
         <div className="prevTask__title">{title}</div>
-        <FontAwesomeIcon className="prevcard__header-icon task__delete mr-1" icon={faClose} />
+        <FontAwesomeIcon className="prevcard__header-icon task__delete" icon={faClose} />
       </div>
       <div className="prevTask__description">{description}</div>
     </div>

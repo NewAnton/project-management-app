@@ -22,11 +22,14 @@ export const kanbanApiBoards = kanbanApi.injectEndpoints({
         method: 'GET',
       }),
     }),
-    updateBoardById: builder.mutation<Board, Board>({
+    updateBoardById: builder.mutation<
+      Board,
+      { boardId: string; title: string; owner: string; users: string[] }
+    >({
       query: (payload) => ({
-        url: `/boards/${payload._id}`,
+        url: `/boards/${payload.boardId}`,
         method: 'PUT',
-        body: payload,
+        body: { title: payload.title, owner: payload.owner, users: payload.users },
       }),
     }),
     deleteBoardById: builder.mutation<Board, string>({

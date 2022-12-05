@@ -1,5 +1,5 @@
-import { Route, Routes } from 'react-router-dom';
-import React from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
 
 import { Navigation } from './components/Navigation/Navigation';
 import { Main } from 'pages/Main/Main';
@@ -10,16 +10,26 @@ import { Task } from 'components/Task/Task';
 import { ErrorPage404 } from 'pages/404ErrorPage/404ErrorPage';
 import { Footer } from 'components/Footer/Footer';
 import { useTypedSelector } from 'hooks/useTypedSelector';
+import { checkIsTokenExpired } from 'services/checkIsTokenExpired';
+import { SignIn } from 'pages/SignIn/SignIn';
+import { SignUp } from 'pages/SignUp/SignUp';
 
 import './App.scss';
 
 export function App() {
-  const { boardID } = useTypedSelector((state) => state.boardID);
+  const { token } = useTypedSelector((state) => state.globalState);
+  const navigate = useNavigate();
+
+  const isTokenExpired = useMemo(() => checkIsTokenExpired(token), [token]);
+
+  useEffect(() => {
+    if (isTokenExpired) navigate('/');
+  }, [isTokenExpired]);
 
   return (
     <>
       <header className="header">
-        <Navigation />
+        <Navigation isTokenExpired={isTokenExpired} />
       </header>
       <main className="main">
         <Routes>
@@ -28,6 +38,8 @@ export function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/board/:id" element={<Board />} />
           <Route path="/task" element={<Task />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Routes>
       </main>

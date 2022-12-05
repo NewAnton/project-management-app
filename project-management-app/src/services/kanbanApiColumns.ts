@@ -12,7 +12,7 @@ export const kanbanApiColumns = kanbanApi.injectEndpoints({
     }),
     createColumnInBoard: builder.mutation<
       Column,
-      { boardId: string; title: string; order: number }
+      { boardId: string; title: string; order: number | undefined }
     >({
       query: (payload) => ({
         url: `/boards/${payload.boardId}/columns`,
