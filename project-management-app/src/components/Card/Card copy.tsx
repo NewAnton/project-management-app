@@ -16,9 +16,6 @@ import { sortByField } from 'services/sortArrayByFieldOfObj';
 
 import './Card.scss';
 
-import { Droppable, Draggable } from 'react-beautiful-dnd';
-import TaskList from 'components/TaskList/TaskList';
-
 interface ICardProps {
   title: string;
   cardId: string;
@@ -51,44 +48,91 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     }
   }, [tasksData]);
 
+  const handleCloseNewTaskModal = () => {
+    setisNewTaskModalOpen(!isNewTaskModalOpen);
+  };
+
+  const handleclick = (event: React.MouseEvent) => {
+    if ((event.target as Element).closest('.card__delete')) {
+      deleteCard({ boardId: boardID, columnId: cardId });
+    }
+  };
+
+  function dragStartHandler(
+    e: React.DragEvent<HTMLElement>,
+    taskCard: Task,
+    columnCard: Column
+  ): void {
+    setCurrentTask(taskCard);
+    setCurrentCard(columnCard);
+  }
+
+  function dragOverHandler(e: React.DragEvent<HTMLElement>): void {
+    // e.preventDefault();
+    // (e.target as HTMLElement).style.boxShadow =
+    //   'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px';
+    // (e.target as HTMLElement).style.background = 'var(--bs-gray-400)';
+    // if ((e.target as HTMLElement).className == 'prevTask__container') {
+    //   // (e.target as HTMLElement).style.borderColor = 'coral';
+    //   (e.target as HTMLElement).style.border = '.15rem solid var(--header-bg)';
+    //   console.log('ssd');
+    // }
+  }
+
+  function dropHandler(e: React.DragEvent<HTMLElement>, taskCard: Task, columnCard: Column): void {
+    e.preventDefault();
+    const tempTasksList = [...arrayOfTask];
+    if (currentTask) {
+      const currentIndex = tempTasksList.indexOf(currentTask);
+      tempTasksList.splice(currentIndex, 1);
+      const dropIndex = tempTasksList.indexOf(taskCard);
+      tempTasksList.splice(dropIndex, 0, currentTask);
+      const newTaskList = tempTasksList.map((task, index) => ({
+        ...task,
+        order: index,
+      }));
+
+      const arrayForServer = newTaskList.map((task) => ({
+        _id: task._id,
+        order: task.order,
+        columnId: columnCard._id,
+      }));
+      changeOrderAndCardOfTask(arrayForServer);
+
+      // setArrayOfTask(newTaskList);
+    }
+  }
+
   return (
-    <div className="board__card">
+    <div className="board__card" onClick={handleclick}>
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
           {title} <span className="board__card-count">({arrayOfTask?.length} Tasks)</span>
         </div>
         <FontAwesomeIcon className="prevcard__header-icon card__delete mr-1" icon={faTrash} />
       </div>
-      <Droppable droppableId={cardId}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="board__card-container"
+      <div className="board__card-container">
+        {arrayOfTask.map((task) => (
+          <Nav.Link
+            className="board__card-link"
+            key={task._id}
+            as={Link}
+            to="/task"
+            draggable={true}
+            onDragStart={(e) => dragStartHandler(e, task, columnCard)}
+            onDragOver={(e) => dragOverHandler(e)}
+            onDrop={(e) => dropHandler(e, task, columnCard)}
           >
-            {arrayOfTask.map((task, index) => (
-              <Draggable key={task._id} draggableId={task._id} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <PrevTask
-                      title={task.title}
-                      description={task.description}
-                      cardId={cardId}
-                      taskId={task._id}
-                    />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-      {/* <div
+            <PrevTask
+              title={task.title}
+              description={task.description}
+              cardId={cardId}
+              taskId={task._id}
+            />
+          </Nav.Link>
+        ))}
+      </div>
+      <div
         className="board__card-footer"
         onClick={() => {
           setisNewTaskModalOpen(true);
@@ -96,8 +140,8 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
       >
         <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
         Add Task
-      </div> */}
-      {/* <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
+      </div>
+      <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
         <ModalCreateEl
           title="Name of Task"
           description="Add description"
@@ -109,7 +153,7 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
           isCard={false}
           arrLength={taskOrder}
         />
-      </ModalWindow> */}
+      </ModalWindow>
     </div>
   );
 }

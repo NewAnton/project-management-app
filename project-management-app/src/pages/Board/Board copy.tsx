@@ -12,7 +12,7 @@ import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Board.scss';
 
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface IBoardProps {
   boardId: string;
@@ -21,11 +21,9 @@ interface IBoardProps {
 export function Board({ boardId }: IBoardProps) {
   const { isLoading, isError, data: cardsData } = useGetColumnsInBoardQuery(boardId);
   const [isNewCardModalOpen, setIsNewCardModalOpen] = useState(false);
-  // const handleCloseNewCardModal = () => {
-  //   setIsNewCardModalOpen(!isNewCardModalOpen);
-  // };
-
-  const handleOnDragEnd = () => {};
+  const handleCloseNewCardModal = () => {
+    setIsNewCardModalOpen(!isNewCardModalOpen);
+  };
 
   return (
     <div className="board__wrapper container-fluid">
@@ -36,26 +34,24 @@ export function Board({ boardId }: IBoardProps) {
         <ErrorMessage message="Something went wrong..." />
       ) : (
         <div className="board__container row flex-row flex-nowrap mt-4 pb-4 pt-2">
-          <DragDropContext onDragEnd={handleOnDragEnd}>
-            {isLoading && <Loading />}
-            {cardsData?.map((card) => (
-              <Card title={card.title} cardId={card._id} key={card._id} columnCard={card} />
-            ))}
-            <div
-              className="board__card card-btn"
-              onClick={() => {
-                setIsNewCardModalOpen(true);
-              }}
-            >
-              <div className="card-btn__title">
-                <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-                Add Card
-              </div>
+          {isLoading && <Loading />}
+          {cardsData?.map((card) => (
+            <Card title={card.title} cardId={card._id} key={card._id} columnCard={card} />
+          ))}
+          <div
+            className="board__card card-btn"
+            onClick={() => {
+              setIsNewCardModalOpen(true);
+            }}
+          >
+            <div className="card-btn__title">
+              <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
+              Add Card
             </div>
-          </DragDropContext>
+          </div>
         </div>
       )}
-      {/* <ModalWindow show={isNewCardModalOpen} onHide={handleCloseNewCardModal} title="New Card">
+      <ModalWindow show={isNewCardModalOpen} onHide={handleCloseNewCardModal} title="New Card">
         <ModalCreateEl
           title="Name of Card"
           onHideModal={handleCloseNewCardModal}
@@ -65,7 +61,7 @@ export function Board({ boardId }: IBoardProps) {
           isCard={true}
           arrLength={cardsData?.length}
         />
-      </ModalWindow> */}
+      </ModalWindow>
     </div>
   );
 }
