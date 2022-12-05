@@ -45,12 +45,7 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
       } else {
         setArrayOfTask(tasksData);
       }
-      // if (tasksData?.length > 0) {
-      //   setTaskOrder(tasksData[tasksData.length - 1].order + 1);
-      // }
-      // setArrayOfTask(tasksData);
     }
-    console.log('fdf');
   }, [tasksData]);
 
   const handleCloseNewTaskModal = () => {
@@ -72,16 +67,6 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     setCurrentCard(columnCard);
   }
 
-  function dragLeaveHandler(e: React.DragEvent<HTMLElement>): void {
-    // (e.target as HTMLElement).style.border = 'none';
-    // console.log('taskCaoord');
-  }
-
-  function dragEndHandler(e: React.DragEvent<HTMLElement>): void {
-    // (e.target as HTMLElement).style.border = 'none';
-    // (e.target as HTMLElement).style.background = 'var(--secondary-color)';
-  }
-
   function dragOverHandler(e: React.DragEvent<HTMLElement>): void {
     e.preventDefault();
     // (e.target as HTMLElement).style.boxShadow =
@@ -100,56 +85,31 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     if (currentTask) {
       const currentIndex = tempTasksList.indexOf(currentTask);
       tempTasksList.splice(currentIndex, 1);
-      const dropIndex = tempTasksList.indexOf(taskCard);
-      tempTasksList.splice(dropIndex, 0, currentTask);
+      if (currentCard?._id === columnCard._id) {
+        const dropIndex = tempTasksList.indexOf(taskCard);
+        tempTasksList.splice(dropIndex, 0, currentTask);
+        console.log(currentTask);
+        console.log(tempTasksList);
+      } else {
+        tempTasksList.push(currentTask);
+        console.log(currentTask);
+        console.log(tempTasksList);
+      }
       const newTaskList = tempTasksList.map((task, index) => ({
         ...task,
         order: index,
       }));
+
       const arrayForServer = newTaskList.map((task) => ({
         _id: task._id,
         order: task.order,
         columnId: columnCard._id,
       }));
       changeOrderAndCardOfTask(arrayForServer);
-      setArrayOfTask(newTaskList);
+
+      // setArrayOfTask(newTaskList);
     }
-
-    // setArrayOfTask((prev) => prev.filter((task) => task !== currentTask));
-    // const dropIndex = arrayOfTask.indexOf(taskCard);
-    // arrayOfTask.splice(dropIndex + 1, 0, currentTask);
-
-    // setArrayOfTask(
-    //   arrayOfTask.map((task) => {
-    //     if (task.order === taskCard.order) {
-    //       return { ...task, order: taskCard.order };
-    //     }
-    //   })
-    // );
-
-    // const arr = arrayOfTask.map((task) => {
-    //   if (task.order === taskCard.order) {
-    //     return { ...task, order: currentTask?.order };
-    //   }
-    //   if (task.order === currentTask?.order) {
-    //     return { ...task, order: taskCard.order };
-    //   }
-    //   return task;
-    // });
-
-    // const sortArr = [...arr].sort(sortField);
-
-    // setArrayOfTask(sortArr);
   }
-
-  // console.log('tasksData', tasksData);
-  // console.log('arrayOfTask', arrayOfTask);
-
-  // const sortField = (a: Task, b: Task) => {
-  //   if (a.order !== undefined && b.order !== undefined) {
-  //     return a.order > b.order ? 1 : -1;
-  //   }
-  // };
 
   return (
     <div className="board__card" onClick={handleclick}>
@@ -168,8 +128,6 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
             to="/task"
             draggable={true}
             onDragStart={(e) => dragStartHandler(e, task, columnCard)}
-            onDragLeave={(e) => dragLeaveHandler(e)}
-            onDragEnd={(e) => dragEndHandler(e)}
             onDragOver={(e) => dragOverHandler(e)}
             onDrop={(e) => dropHandler(e, task, columnCard)}
           >
