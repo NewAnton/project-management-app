@@ -14,6 +14,7 @@ export function DeleteUser() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [deleteUser, deleteUserResponse] = useDeleteUserByIdMutation();
   const { token } = useTypedSelector((state) => state.globalState);
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { setToken } = useActions();
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function DeleteUser() {
           <Loading />
         ) : (
           <>
-            <p>Are you sure?</p>
+            <p>{languageChoice ? 'Are you sure?' : 'Вы уверены?'}</p>
             <button
               type="button"
               className="btn btn-primary"
@@ -62,16 +63,16 @@ export function DeleteUser() {
                 deleteUser((decodeToken(token) as DecodedTokenInterface).id || '');
               }}
             >
-              YES
+              {languageChoice ? 'YES' : 'Да'}
             </button>
             <button type="button" className="btn btn-primary" onClick={handleCloseConfirmModal}>
-              NO
+              {languageChoice ? 'NO' : 'Нет'}
             </button>{' '}
           </>
         )}
       </ModalWindow>
       <button type="button" className="btn btn-primary" onClick={handleDeleteUserButton}>
-        Delete User
+        {languageChoice ? 'Delete User' : 'Удалить пользователя'}
       </button>
     </>
   );

@@ -9,6 +9,7 @@ import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
 import { useGetColumnsInBoardQuery } from 'services/kanbanApiColumns';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Board.scss';
 
@@ -17,6 +18,7 @@ interface IBoardProps {
 }
 
 export function Board({ boardId }: IBoardProps) {
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { isLoading, isError, data: cardsData } = useGetColumnsInBoardQuery(boardId);
   const [isNewCardModalOpen, setIsNewCardModalOpen] = useState(false);
   const handleCloseNewCardModal = () => {
@@ -26,7 +28,7 @@ export function Board({ boardId }: IBoardProps) {
   return (
     <div className="board__wrapper container-fluid">
       <Container>
-        <h2 className="main__title">Board</h2>
+        <h2 className="main__title">{languageChoice ? 'Board' : 'Доска'}</h2>
       </Container>
       {isError ? (
         <ErrorMessage message="Something went wrong..." />
@@ -44,14 +46,18 @@ export function Board({ boardId }: IBoardProps) {
           >
             <div className="card-btn__title">
               <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-              Add Card
+              {languageChoice ? 'Add Card' : 'Добавить карточку'}
             </div>
           </div>
         </div>
       )}
-      <ModalWindow show={isNewCardModalOpen} onHide={handleCloseNewCardModal} title="New Card">
+      <ModalWindow
+        show={isNewCardModalOpen}
+        onHide={handleCloseNewCardModal}
+        title={languageChoice ? 'New Card' : 'Новая карточка'}
+      >
         <ModalCreateEl
-          title="Name of Card"
+          title={languageChoice ? 'Name of Card' : 'Название карточки'}
           onHideModal={handleCloseNewCardModal}
           boardId={boardId}
           showDescription={false}

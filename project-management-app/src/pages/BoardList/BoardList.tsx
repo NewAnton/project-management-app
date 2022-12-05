@@ -3,26 +3,20 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
-import { useCreateBoardMutation, useGetAllBoardsQuery } from 'services/kanbanApiBoards';
+import { useGetAllBoardsQuery } from 'services/kanbanApiBoards';
 import { PrevBoard } from 'components/PrevBoard/PrevBoard';
 import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
 import { Loading } from 'components/Loading/Loading';
 import { useActions } from 'hooks/useActions';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './BoardList.scss';
 
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
-  const [createBoard] = useCreateBoardMutation();
 
-  const funcCreate = () => {
-    createBoard({
-      title: JSON.stringify({ title: 'fours board', description: 'description for fours board' }),
-      owner: 'I am',
-      users: ['only me'],
-    });
-  };
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
 
   const clickHandlerBoard = (boardId: string) => {
     changeBoardID(boardId);
@@ -30,9 +24,7 @@ export function BoardList() {
 
   return (
     <Container>
-      <h2 className="main__title" onClick={funcCreate}>
-        Boards List
-      </h2>
+      <h2 className="main__title">{languageChoice ? ' Boards List' : 'Список досок'}</h2>
       {isError ? (
         <ErrorMessage message="Something went wrong..." />
       ) : (

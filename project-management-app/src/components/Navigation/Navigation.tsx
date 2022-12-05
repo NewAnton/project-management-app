@@ -13,6 +13,7 @@ import {
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { useActions } from 'hooks/useActions';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Navigation.scss';
 
@@ -22,8 +23,8 @@ interface NavigationProps {
 
 export function Navigation({ isTokenExpired }: NavigationProps) {
   const [navBarTheme, setnavBarTheme] = useState('header__navbar');
-  const [language, setLanguage] = useState(false);
-  const { setToken } = useActions();
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
+  const { setToken, changeLanguage } = useActions();
 
   const changeNavBarTheme = () => {
     window.scrollY >= 80
@@ -33,15 +34,15 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
 
   window.addEventListener('scroll', changeNavBarTheme);
 
-  const changeLanguage = () => {
-    setLanguage(!language);
+  const changeLanguageFunc = () => {
+    changeLanguage(!languageChoice);
   };
 
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark" className={navBarTheme}>
       <Container>
         <Navbar.Brand className="font-weight-bold navbar__logo" href="/">
-          Project Management App
+          {languageChoice ? 'Project Management App' : 'Приложение для управления проектами'}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav" className="navbar__item">
@@ -49,22 +50,22 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
             <Nav className="me-auto navbar__link-container">
               <Nav.Link className="navbar__link" as={Link} to="/new-board">
                 <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-                New Board
+                {languageChoice ? 'New Board' : 'Новая Доска'}
               </Nav.Link>
               <Nav.Link className="navbar__link" as={Link} to="/board-list">
                 <FontAwesomeIcon className="mr-1" icon={faListSquares} size="xs" />
-                Boards
+                {languageChoice ? 'Boards' : 'Доски'}
               </Nav.Link>
               <Nav.Link className="navbar__link" as={Link} to="/profile">
                 <FontAwesomeIcon className="mr-1" icon={faUser} size="xs" />
-                Edit Profile
+                {languageChoice ? 'Edit Profile' : 'Редактировать профиль'}
               </Nav.Link>
             </Nav>
           )}
           <Nav className="navbar__btn-container">
-            <button type="button" className="navbar__btn" onClick={changeLanguage}>
+            <button type="button" className="navbar__btn" onClick={changeLanguageFunc}>
               <FontAwesomeIcon className="mr-1" icon={faGlobe} size="xs" />
-              {language ? 'Ru' : 'En'}
+              {languageChoice ? 'En' : 'Ru'}
             </button>
             {!isTokenExpired ? (
               <button
@@ -80,18 +81,18 @@ export function Navigation({ isTokenExpired }: NavigationProps) {
                   icon={faRightFromBracket}
                   size="xs"
                 />
-                Sign Out
+                {languageChoice ? 'Sign Out' : 'Выход'}
               </button>
             ) : (
               <>
                 <Nav className="me-auto navbar__link-container">
                   <Nav.Link className="navbar__link" as={Link} to="/sign-up">
                     <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
-                    Sign up
+                    {languageChoice ? 'Sign up' : 'Зарегистрироваться'}
                   </Nav.Link>
                   <Nav.Link className="navbar__link" as={Link} to="/sign-in">
                     <FontAwesomeIcon className="mr-1" icon={faRightFromBracket} size="xs" />
-                    Sign In
+                    {languageChoice ? ' Sign In' : 'Войти'}
                   </Nav.Link>
                 </Nav>
               </>

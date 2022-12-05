@@ -7,11 +7,13 @@ import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { useActions } from 'hooks/useActions';
 import Container from 'react-bootstrap/esm/Container';
 import { useAuthSignInQuery } from 'services/kanbanApiAuth';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 import { SignInRequest, RequestErrorInterface } from 'types/kanbanApiTypes';
 
 export function SignIn() {
   const [signInData, setSignInData] = useState({ login: '', password: '' });
   const { setToken } = useActions();
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { register, handleSubmit } = useForm<SignInRequest>();
   const { data, isLoading, error, isSuccess, isError } = useAuthSignInQuery(
     { login: signInData.login, password: signInData.password },
@@ -47,9 +49,9 @@ export function SignIn() {
 
   return (
     <Container>
-      <h2 className="main__title">Sign In</h2>
+      <h2 className="main__title">{languageChoice ? 'Sign In' : 'Вход'}</h2>
       <ModalWindow show={isSuccessModalOpen} onHide={handleCloseSuccessModal} title={'Success'}>
-        <p>Successfully sign in</p>
+        <p>{languageChoice ? 'Successfully sign in!' : 'Вход выполнен успешно!'}</p>
       </ModalWindow>
       <ModalWindow show={isErrorModalOpen} onHide={handleCloseErrorModal} title={'Error'}>
         <p>{error && (error as RequestErrorInterface).data.message}</p>
@@ -59,10 +61,13 @@ export function SignIn() {
           <Loading />
         </div>
       ) : (
-        <form className="sign-in-form" onSubmit={handleSubmit(onSubmitHandler)}>
-          {/* <h1 className="sign-in-form__h1 h1"> Sign In</h1> */}
+        <form
+          className="sign-in-form"
+          style={{ maxWidth: '25rem', margin: '0 auto' }}
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
           <div className="form-group">
-            <label htmlFor="sign-in-form__login-input">Login</label>
+            <label htmlFor="sign-in-form__login-input">{languageChoice ? 'Login' : 'Логин'}</label>
             <input
               {...register('login', { required: true })}
               type="text"
@@ -72,7 +77,9 @@ export function SignIn() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="sign-in-form__password-input">Password</label>
+            <label htmlFor="sign-in-form__password-input">
+              {languageChoice ? 'Password' : 'Пароль'}
+            </label>
             <input
               {...register('password', { required: true })}
               type="password"
@@ -80,8 +87,12 @@ export function SignIn() {
               id="sign-in-form__password-input"
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
+          <button
+            type="submit"
+            style={{ width: '10rem', margin: '2.5rem auto', display: 'block' }}
+            className="btn btn-primary"
+          >
+            {languageChoice ? 'Submit' : 'Войти'}
           </button>
         </form>
       )}
