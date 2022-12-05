@@ -59,7 +59,11 @@ export function Profile() {
       {getNewUserInfo.isLoading ? (
         <Loading />
       ) : (
-        <form className="profile-form" onSubmit={handleSubmit(onSubmitHandler)}>
+        <form
+          className="profile-form"
+          style={{ maxWidth: '25rem', margin: '0 auto' }}
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
           {/* <h1 className="profile-form__h1 h1"> Sign Up</h1> */}
           <div className="form-group">
             <label htmlFor="profile-form__name-input">Name</label>
@@ -100,10 +104,12 @@ export function Profile() {
               I&apos;m not a robot!
             </label>
           </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-          <DeleteUser />
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.5rem' }}>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <DeleteUser />
+          </div>
         </form>
       )}
     </Container>
