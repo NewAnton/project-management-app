@@ -36,6 +36,12 @@ export function Main() {
                 ? 'Collaborate manage projects and reach new productivity peaks. Accomplish it all with RS Project Management App'
                 : 'Управляйте проектами и командами, достигайте новых вершин продуктивности с помощью RS Project Management App'}
             </h5>
+            <a
+              className="description-link"
+              href="https://docs.google.com/document/d/1-ADjPq036Ig0fKdvszD0LtrTa2JHT1FMh2emjRW3hB4/edit?usp=sharing"
+            >
+              {languageChoice ? 'Project description' : 'Описание проекта'}
+            </a>
           </div>
         </div>
       </section>
