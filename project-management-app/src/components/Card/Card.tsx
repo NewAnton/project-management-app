@@ -23,6 +23,7 @@ interface ICardProps {
 
 export function Card({ title, cardId, columnCard }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { data: tasksData } = useGetTasksInColumnQuery({
     boardId: boardID,
     columnId: cardId,
@@ -123,12 +124,16 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
         }}
       >
         <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-        Add Task
+        {languageChoice ? 'Add Task' : 'Добавить Задачу'}
       </div>
-      <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
+      <ModalWindow
+        show={isNewTaskModalOpen}
+        onHide={handleCloseNewTaskModal}
+        title={languageChoice ? 'New Task' : 'Новая Задача'}
+      >
         <ModalCreateEl
-          title="Name of Task"
-          description="Add description"
+          title={languageChoice ? 'Name of Task' : 'Название Задачи'}
+          description={languageChoice ? 'Add description' : 'Добавьте описание'}
           onHideModal={handleCloseNewTaskModal}
           boardId={boardID}
           cardId={cardId}
