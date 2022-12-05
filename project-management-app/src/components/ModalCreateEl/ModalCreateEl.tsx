@@ -44,6 +44,8 @@ export function ModalCreateEl({
 
   const currentBoard = useGetBoardByIdQuery(boardId);
   const currentBoardId = currentBoard.currentData?._id ? currentBoard.currentData._id : '';
+  const currentBoardOwner = currentBoard.currentData?.owner ? currentBoard.currentData.owner : '';
+  const currentBoardUsers = currentBoard.currentData?.users ? currentBoard.currentData.users : [''];
 
   const onSubmitHandler = (data: CreateEl) => {
     onHideModal();
@@ -69,8 +71,8 @@ export function ModalCreateEl({
       updateBoard({
         boardId: currentBoardId,
         title: JSON.stringify({ title: data.title, description: data.description }),
-        owner: '123qwerty',
-        users: ['123qwerty'],
+        owner: currentBoardOwner,
+        users: currentBoardUsers,
       });
       console.log('isBoard', boardId);
     }
