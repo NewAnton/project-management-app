@@ -13,8 +13,6 @@ import { useTypedSelector } from 'hooks/useTypedSelector';
 import './BoardList.scss';
 
 export function BoardList() {
-  // const [deleteBoardById] = useDeleteBoardByIdMutation();
-  // deleteBoardById('638692d87d51b3a61a8eb91e');
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
 
