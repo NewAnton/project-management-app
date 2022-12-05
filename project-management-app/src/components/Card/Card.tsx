@@ -16,7 +16,7 @@ import { sortByField } from 'services/sortArrayByFieldOfObj';
 
 import './Card.scss';
 
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable, Draggable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 import TaskList from 'components/TaskList/TaskList';
 
 interface ICardProps {
@@ -32,24 +32,30 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     columnId: cardId,
   });
   const [arrayOfTask, setArrayOfTask] = useState<Task[]>([]);
-  const [taskOrder, setTaskOrder] = useState(0);
-  const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
-  const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
-  const [currentCard, setCurrentCard] = useState<Column | null>(null);
-  const [deleteCard] = useDeleteColumnByIdMutation();
-  const [deleteTask] = useDeleteTasksByIdMutation();
+  // const [taskOrder, setTaskOrder] = useState(0);
   const [changeOrderAndCardOfTask] = useUpdateSetOfTasksMutation();
 
   useEffect(() => {
     if (tasksData !== undefined) {
       if (tasksData?.length > 0) {
         setArrayOfTask([...tasksData].sort(sortByField('order')));
-        setTaskOrder(tasksData[tasksData.length - 1].order + 1);
+        // setTaskOrder(tasksData[tasksData.length - 1].order + 1);
       } else {
         setArrayOfTask(tasksData);
       }
     }
   }, [tasksData]);
+
+  const handleOnDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+    //draggableId - column id
+    if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId && destination.index === source.index)
+      return;
+    console.log(result);
+  };
 
   return (
     <div className="board__card">
@@ -59,35 +65,37 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
         </div>
         <FontAwesomeIcon className="prevcard__header-icon card__delete mr-1" icon={faTrash} />
       </div>
-      <Droppable droppableId={cardId}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="board__card-container"
-          >
-            {arrayOfTask.map((task, index) => (
-              <Draggable key={task._id} draggableId={task._id} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <PrevTask
-                      title={task.title}
-                      description={task.description}
-                      cardId={cardId}
-                      taskId={task._id}
-                    />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId={cardId}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="board__card-container"
+            >
+              {arrayOfTask.map((task, index) => (
+                <Draggable key={task._id} draggableId={task._id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <PrevTask
+                        title={task.title}
+                        description={task.description}
+                        cardId={cardId}
+                        taskId={task._id}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       {/* <div
         className="board__card-footer"
         onClick={() => {
