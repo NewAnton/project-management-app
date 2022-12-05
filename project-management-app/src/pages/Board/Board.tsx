@@ -12,7 +12,7 @@ import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Board.scss';
 
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 interface IBoardProps {
   boardId: string;
@@ -25,7 +25,14 @@ export function Board({ boardId }: IBoardProps) {
   //   setIsNewCardModalOpen(!isNewCardModalOpen);
   // };
 
-  const handleOnDragEnd = () => {};
+  const handleOnDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId && destination.index === source.index)
+      return;
+  };
 
   return (
     <div className="board__wrapper container-fluid">
