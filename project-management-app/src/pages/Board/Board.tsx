@@ -34,7 +34,7 @@ export function Board({ boardId }: IBoardProps) {
         <div className="board__container row flex-row flex-nowrap mt-4 pb-4 pt-2">
           {isLoading && <Loading />}
           {cardsData?.map((card) => (
-            <Card title={card.title} cardId={card._id} key={card._id} />
+            <Card title={card.title} cardId={card._id} key={card._id} columnCard={card} />
           ))}
           <div
             className="board__card card-btn"
@@ -57,6 +57,7 @@ export function Board({ boardId }: IBoardProps) {
           showDescription={false}
           isTask={false}
           isCard={true}
+          arrLength={cardsData?.length}
         />
       </ModalWindow>
     </div>

@@ -17,6 +17,7 @@ interface ICreateElForm {
   showDescription: boolean;
   isTask: boolean;
   isCard: boolean;
+  arrLength?: number | undefined;
 }
 
 export function ModalCreateEl({
@@ -28,6 +29,7 @@ export function ModalCreateEl({
   showDescription,
   isTask,
   isCard,
+  arrLength,
 }: ICreateElForm) {
   const [createTask] = useCreateTaskInColumnMutation<Task>();
   const [createCard] = useCreateColumnInBoardMutation<Column>();
@@ -45,21 +47,18 @@ export function ModalCreateEl({
         boardId: boardId,
         columnId: cardId,
         title: data.title,
-        order: 0,
+        order: arrLength,
         description: data.description,
         userId: '0',
         users: ['string'],
       });
-      console.log('isTask');
     } else if (isCard) {
       createCard({
         boardId: boardId,
         title: data.title,
-        order: 0,
+        order: arrLength,
       });
-      console.log('isCard');
     }
-    console.log(data);
   };
 
   return (
