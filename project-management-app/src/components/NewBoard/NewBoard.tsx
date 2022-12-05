@@ -10,35 +10,6 @@ export type FormValues = {
   description: string;
 };
 
-// export function NewBoardFormModal() {
-//   const [isNewBoardModalOpen, setNewBoardModalOpen] = useState(false);
-//   const handleShowNewBoardModal = () => setNewBoardModalOpen(true);
-//   const handleCloseNewBoardModal = () => setNewBoardModalOpen(false);
-
-//   return (
-//     <>
-//       <button
-//         style={{
-//           background: 'none',
-//           border: 'none',
-//         }}
-//         className="navbar__link"
-//         onClick={handleShowNewBoardModal}
-//       >
-//         <FontAwesomeIcon className="element__star mr-1" icon={faPlus} size="xs" />
-//         New Board
-//       </button>
-//       <ModalWindow
-//         show={isNewBoardModalOpen}
-//         onHide={handleCloseNewBoardModal}
-//         title={getToken() ? 'Create board' : 'Something went wrong'}
-//       >
-//         {getToken() ? <NewBoardForm /> : <div>Login please</div>}
-//       </ModalWindow>
-//     </>
-//   );
-// }
-
 function NewBoardForm() {
   const user = localStorage.getItem('login');
   const login = typeof user === 'string' ? user : '';
@@ -58,7 +29,6 @@ function NewBoardForm() {
       users: [`${login}`],
     });
     reset();
-    //handleCloseNewBoardModal();
   };
 
   return (
