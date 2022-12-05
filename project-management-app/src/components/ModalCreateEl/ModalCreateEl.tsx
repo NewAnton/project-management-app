@@ -5,6 +5,7 @@ import { ErrorTextMessage } from 'components/ErrorTextMessage/ErrorTextMessage';
 import { CreateEl, Task, Column } from 'types/kanbanApiTypes';
 import { useCreateTaskInColumnMutation } from 'services/kanbanApiTasks';
 import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './ModalCreateEl.scss';
 
@@ -33,6 +34,7 @@ export function ModalCreateEl({
 }: ICreateElForm) {
   const [createTask] = useCreateTaskInColumnMutation<Task>();
   const [createCard] = useCreateColumnInBoardMutation<Column>();
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
 
   const {
     register,
@@ -118,8 +120,12 @@ export function ModalCreateEl({
           </div>
         </div>
       )}
-      <button type="submit" className="btn btn-primary mt-2">
-        Submit
+      <button
+        type="submit"
+        style={{ width: '10rem', margin: '2rem auto 1rem auto', display: 'block' }}
+        className="btn btn-primary"
+      >
+        {languageChoice ? 'Submit' : 'Создать'}
       </button>
     </form>
   );

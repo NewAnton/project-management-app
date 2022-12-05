@@ -3,42 +3,19 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 
-import {
-  useCreateBoardMutation,
-  useDeleteBoardByIdMutation,
-  useGetAllBoardsQuery,
-} from 'services/kanbanApiBoards';
-import { useGetColumnsInBoardQuery } from 'services/kanbanApiColumns';
+import { useGetAllBoardsQuery } from 'services/kanbanApiBoards';
 import { PrevBoard } from 'components/PrevBoard/PrevBoard';
 import { ErrorMessage } from 'components/ErrorMessage/ErrorMessage';
 import { Loading } from 'components/Loading/Loading';
-import { useCreateColumnInBoardMutation } from 'services/kanbanApiColumns';
 import { useActions } from 'hooks/useActions';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './BoardList.scss';
 
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
-
-  const { data: columnsData } = useGetColumnsInBoardQuery('638601fb7d51b3a61a8eb7c9');
-  const [addColumn] = useCreateColumnInBoardMutation();
-  const [deleteBoard] = useDeleteBoardByIdMutation();
-  const [createBoard] = useCreateBoardMutation();
-
-  const funcDel = () => {
-    deleteBoard('638601247d51b3a61a8eb7c5');
-  };
-
-  const funcCreate = () => {
-    createBoard({
-      title: JSON.stringify({ title: 'fours board', description: 'description for fours board' }),
-      owner: 'I am',
-      users: ['only me'],
-    });
-  };
-
-  // console.log(columnsData);
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
 
   const clickHandlerBoard = (boardId: string) => {
     changeBoardID(boardId);
@@ -46,9 +23,7 @@ export function BoardList() {
 
   return (
     <Container>
-      <h2 className="main__title" onClick={funcCreate}>
-        Boards List
-      </h2>
+      <h2 className="main__title">{languageChoice ? ' Boards List' : 'Список досок'}</h2>
       {isError ? (
         <ErrorMessage message="Something went wrong..." />
       ) : (

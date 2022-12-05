@@ -10,7 +10,6 @@ import { useTypedSelector } from 'hooks/useTypedSelector';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
-import { useDeleteTasksByIdMutation } from 'services/kanbanApiTasks';
 import { Task, Column } from 'types/kanbanApiTypes';
 import { sortByField } from 'services/sortArrayByFieldOfObj';
 
@@ -24,6 +23,7 @@ interface ICardProps {
 
 export function Card({ title, cardId, columnCard }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { data: tasksData } = useGetTasksInColumnQuery({
     boardId: boardID,
     columnId: cardId,
@@ -32,9 +32,7 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
   const [taskOrder, setTaskOrder] = useState(0);
   const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
-  const [currentCard, setCurrentCard] = useState<Column | null>(null);
   const [deleteCard] = useDeleteColumnByIdMutation();
-  const [deleteTask] = useDeleteTasksByIdMutation();
   const [changeOrderAndCardOfTask] = useUpdateSetOfTasksMutation();
 
   useEffect(() => {
@@ -58,25 +56,12 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     }
   };
 
-  function dragStartHandler(
-    e: React.DragEvent<HTMLElement>,
-    taskCard: Task,
-    columnCard: Column
-  ): void {
+  function dragStartHandler(e: React.DragEvent<HTMLElement>, taskCard: Task): void {
     setCurrentTask(taskCard);
-    setCurrentCard(columnCard);
   }
 
   function dragOverHandler(e: React.DragEvent<HTMLElement>): void {
     e.preventDefault();
-    // (e.target as HTMLElement).style.boxShadow =
-    //   'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px';
-    // (e.target as HTMLElement).style.background = 'var(--bs-gray-400)';
-    // if ((e.target as HTMLElement).className == 'prevTask__container') {
-    //   // (e.target as HTMLElement).style.borderColor = 'coral';
-    //   (e.target as HTMLElement).style.border = '.15rem solid var(--header-bg)';
-    //   console.log('ssd');
-    // }
   }
 
   function dropHandler(e: React.DragEvent<HTMLElement>, taskCard: Task, columnCard: Column): void {
@@ -119,7 +104,7 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
             as={Link}
             to="/task"
             draggable={true}
-            onDragStart={(e) => dragStartHandler(e, task, columnCard)}
+            onDragStart={(e) => dragStartHandler(e, task)}
             onDragOver={(e) => dragOverHandler(e)}
             onDrop={(e) => dropHandler(e, task, columnCard)}
           >
@@ -139,12 +124,16 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
         }}
       >
         <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
-        Add Task
+        {languageChoice ? 'Add Task' : 'Добавить Задачу'}
       </div>
-      <ModalWindow show={isNewTaskModalOpen} onHide={handleCloseNewTaskModal} title="New Task">
+      <ModalWindow
+        show={isNewTaskModalOpen}
+        onHide={handleCloseNewTaskModal}
+        title={languageChoice ? 'New Task' : 'Новая Задача'}
+      >
         <ModalCreateEl
-          title="Name of Task"
-          description="Add description"
+          title={languageChoice ? 'Name of Task' : 'Название Задачи'}
+          description={languageChoice ? 'Add description' : 'Добавьте описание'}
           onHideModal={handleCloseNewTaskModal}
           boardId={boardID}
           cardId={cardId}

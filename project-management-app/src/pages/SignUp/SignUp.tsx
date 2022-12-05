@@ -6,12 +6,14 @@ import { Loading } from 'components/Loading/Loading';
 import { ModalWindow } from 'components/ModalWindow/ModalWindow';
 import Container from 'react-bootstrap/esm/Container';
 import { useAuthSignUpMutation } from 'services/kanbanApiAuth';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 import { RequestErrorInterface, SignUpRequest } from 'types/kanbanApiTypes';
 
 export function SignUp() {
   const [signUpRequest, signUpResponse] = useAuthSignUpMutation();
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<SignUpRequest>();
@@ -36,9 +38,9 @@ export function SignUp() {
 
   return (
     <Container>
-      <h2 className="main__title">Sign Up</h2>
+      <h2 className="main__title">{languageChoice ? 'Sign Up' : 'Регистрация'}</h2>
       <ModalWindow show={isSuccessModalOpen} onHide={handleCloseSuccessModal} title={'Success'}>
-        <p>New User created</p>
+        <p>{languageChoice ? 'New User created!' : 'Новый пользователь создан!'}</p>
       </ModalWindow>
       <ModalWindow show={isErrorModalOpen} onHide={handleCloseErrorModal} title={'Error'}>
         <p>
@@ -48,10 +50,13 @@ export function SignUp() {
       {signUpResponse.isLoading ? (
         <Loading />
       ) : (
-        <form className="sign-up-form" onSubmit={handleSubmit(onSubmitHandler)}>
-          {/* <h1 className="sign-up-form__h1 h1"> Sign Up</h1> */}
+        <form
+          className="sign-up-form"
+          style={{ maxWidth: '25rem', margin: '0 auto' }}
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
           <div className="form-group">
-            <label htmlFor="sign-up-form__name-input">Name</label>
+            <label htmlFor="sign-up-form__name-input">{languageChoice ? 'Name' : 'Имя'}</label>
             <input
               {...register('name', { required: true })}
               type="text"
@@ -65,7 +70,7 @@ export function SignUp() {
         </small> */}
           </div>
           <div className="form-group">
-            <label htmlFor="sign-up-form__login-input">Login</label>
+            <label htmlFor="sign-up-form__login-input">{languageChoice ? 'Login' : 'Логин'}</label>
             <input
               {...register('login', { required: true })}
               type="text"
@@ -75,7 +80,9 @@ export function SignUp() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="sign-up-form__password-input">Password</label>
+            <label htmlFor="sign-up-form__password-input">
+              {languageChoice ? 'Password' : 'Пароль'}
+            </label>
             <input
               {...register('password', { required: true })}
               type="password"
@@ -86,11 +93,15 @@ export function SignUp() {
           <div className="form-group form-check">
             <input type="checkbox" className="form-check-input" id="sign-up-form__check1" />
             <label className="form-check-label" htmlFor="sign-up-form__check1">
-              I&apos;m not a robot!
+              {languageChoice ? "I'm not a robot!" : 'Я не робот'}
             </label>
           </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
+          <button
+            type="submit"
+            style={{ width: '15rem', margin: '2.5rem auto', display: 'block' }}
+            className="btn btn-primary"
+          >
+            {languageChoice ? 'Submit' : 'Зарегистрироваться'}
           </button>
         </form>
       )}
