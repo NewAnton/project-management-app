@@ -40,6 +40,7 @@ export function Profile() {
       login: data.login,
       password: data.password,
     });
+    localStorage.setItem('login', data.login);
   };
 
   const handleCloseSuccessModal = () => {

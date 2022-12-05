@@ -40,6 +40,9 @@ export type FormValues = {
 // }
 
 function NewBoardForm() {
+  const user = localStorage.getItem('login');
+  const login = typeof user === 'string' ? user : '';
+
   const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const [createBoard] = useCreateBoardMutation();
   const {
@@ -51,8 +54,8 @@ function NewBoardForm() {
   const onSubmit = async (data: FormValues) => {
     createBoard({
       title: JSON.stringify({ title: data.name, description: data.description }),
-      owner: '123qwerty',
-      users: ['123qwerty'],
+      owner: login,
+      users: [`${login}`],
     });
     reset();
     //handleCloseNewBoardModal();
