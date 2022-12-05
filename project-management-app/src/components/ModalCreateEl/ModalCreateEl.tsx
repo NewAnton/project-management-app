@@ -118,7 +118,11 @@ export function ModalCreateEl({
           </div>
         </div>
       )}
-      <button type="submit" className="btn btn-primary mt-2">
+      <button
+        type="submit"
+        style={{ width: '10rem', margin: '2rem auto 1rem auto', display: 'block' }}
+        className="btn btn-primary"
+      >
         Submit
       </button>
     </form>

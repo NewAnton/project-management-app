@@ -48,8 +48,11 @@ export function SignUp() {
       {signUpResponse.isLoading ? (
         <Loading />
       ) : (
-        <form className="sign-up-form" onSubmit={handleSubmit(onSubmitHandler)}>
-          {/* <h1 className="sign-up-form__h1 h1"> Sign Up</h1> */}
+        <form
+          className="sign-up-form"
+          style={{ maxWidth: '25rem', margin: '0 auto' }}
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
           <div className="form-group">
             <label htmlFor="sign-up-form__name-input">Name</label>
             <input
@@ -89,7 +92,11 @@ export function SignUp() {
               I&apos;m not a robot!
             </label>
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            style={{ width: '10rem', margin: '2.5rem auto', display: 'block' }}
+            className="btn btn-primary"
+          >
             Submit
           </button>
         </form>

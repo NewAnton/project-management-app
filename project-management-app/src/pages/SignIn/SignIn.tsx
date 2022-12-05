@@ -59,8 +59,11 @@ export function SignIn() {
           <Loading />
         </div>
       ) : (
-        <form className="sign-in-form" onSubmit={handleSubmit(onSubmitHandler)}>
-          {/* <h1 className="sign-in-form__h1 h1"> Sign In</h1> */}
+        <form
+          className="sign-in-form"
+          style={{ maxWidth: '25rem', margin: '0 auto' }}
+          onSubmit={handleSubmit(onSubmitHandler)}
+        >
           <div className="form-group">
             <label htmlFor="sign-in-form__login-input">Login</label>
             <input
@@ -80,7 +83,11 @@ export function SignIn() {
               id="sign-in-form__password-input"
             />
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            style={{ width: '10rem', margin: '2.5rem auto', display: 'block' }}
+            className="btn btn-primary"
+          >
             Submit
           </button>
         </form>
