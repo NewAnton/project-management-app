@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-import Nav from 'react-bootstrap/Nav';
-import { Link } from 'react-router-dom';
 
 import { PrevTask } from 'components/PrevTask/PrevTask';
 import { useGetTasksInColumnQuery, useUpdateSetOfTasksMutation } from 'services/kanbanApiTasks';
 import { useTypedSelector } from 'hooks/useTypedSelector';
-import { ModalWindow } from 'components/ModalWindow/ModalWindow';
-import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
-import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
 import { Task, Column } from 'types/kanbanApiTypes';
 import { sortByField } from 'services/sortArrayByFieldOfObj';
+import { ModalWindow } from 'components/ModalWindow/ModalWindow';
+import { ModalCreateEl } from 'components/ModalCreateEl/ModalCreateEl';
 
 import './Card.scss';
+
+import { Droppable, Draggable, DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { useDeleteColumnByIdMutation } from 'services/kanbanApiColumns';
 
 interface ICardProps {
   title: string;
@@ -21,7 +21,7 @@ interface ICardProps {
   columnCard: Column;
 }
 
-export function Card({ title, cardId, columnCard }: ICardProps) {
+export function Card({ title, cardId }: ICardProps) {
   const { boardID } = useTypedSelector((state) => state.boardID);
   const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   const { data: tasksData } = useGetTasksInColumnQuery({
@@ -29,98 +29,113 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     columnId: cardId,
   });
   const [arrayOfTask, setArrayOfTask] = useState<Task[]>([]);
-  const [taskOrder, setTaskOrder] = useState(0);
-  const [isNewTaskModalOpen, setisNewTaskModalOpen] = useState(false);
-  const [currentTask, setCurrentTask] = useState<Task | undefined>(undefined);
+  const [updatedArrayOfTask, setUpdatedArrayOfTask] = useState<
+    { _id: string; order: number; columnId: string }[]
+  >([]);
+  const [changeOrderRequest, newArrayOfTask] = useUpdateSetOfTasksMutation();
+  const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
   const [deleteCard] = useDeleteColumnByIdMutation();
-  const [changeOrderAndCardOfTask] = useUpdateSetOfTasksMutation();
 
   useEffect(() => {
     if (tasksData !== undefined) {
       if (tasksData?.length > 0) {
         setArrayOfTask([...tasksData].sort(sortByField('order')));
-        setTaskOrder(tasksData[tasksData.length - 1].order + 1);
       } else {
         setArrayOfTask(tasksData);
       }
     }
   }, [tasksData]);
 
-  const handleCloseNewTaskModal = () => {
-    setisNewTaskModalOpen(!isNewTaskModalOpen);
+  useEffect(() => {
+    if (updatedArrayOfTask.length) changeOrderRequest(updatedArrayOfTask);
+  }, [updatedArrayOfTask]);
+
+  useEffect(() => {
+    if (newArrayOfTask.isSuccess) {
+      setArrayOfTask([...newArrayOfTask.data].sort(sortByField('order')));
+    }
+  }, [newArrayOfTask]);
+
+  const handleOnDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId && destination.index === source.index)
+      return;
+
+    setArrayOfTask(() => {
+      const newArrayOfTask = arrayOfTask.map((task) => {
+        return { ...task };
+      });
+      newArrayOfTask[source.index].order = destination.index + 1;
+      newArrayOfTask[destination.index].order = source.index + 1;
+      return newArrayOfTask.sort(sortByField('order'));
+    });
+
+    setUpdatedArrayOfTask(() => {
+      const newArrayOfTask = arrayOfTask.map((task) => {
+        return { _id: task._id, order: task.order, columnId: task.columnId };
+      });
+      newArrayOfTask[source.index].order = destination.index + 1;
+      newArrayOfTask[destination.index].order = source.index + 1;
+      return newArrayOfTask;
+    });
   };
 
-  const handleclick = (event: React.MouseEvent) => {
+  const handleCloseNewTaskModal = () => {
+    setIsNewTaskModalOpen(!isNewTaskModalOpen);
+  };
+
+  const handleDeleteCardButton = (event: React.MouseEvent) => {
     if ((event.target as Element).closest('.card__delete')) {
       deleteCard({ boardId: boardID, columnId: cardId });
     }
   };
 
-  function dragStartHandler(e: React.DragEvent<HTMLElement>, taskCard: Task): void {
-    setCurrentTask(taskCard);
-  }
-
-  function dragOverHandler(e: React.DragEvent<HTMLElement>): void {
-    e.preventDefault();
-  }
-
-  function dropHandler(e: React.DragEvent<HTMLElement>, taskCard: Task, columnCard: Column): void {
-    e.preventDefault();
-    const tempTasksList = [...arrayOfTask];
-    if (currentTask) {
-      const currentIndex = tempTasksList.indexOf(currentTask);
-      tempTasksList.splice(currentIndex, 1);
-      const dropIndex = tempTasksList.indexOf(taskCard);
-      tempTasksList.splice(dropIndex, 0, currentTask);
-      const newTaskList = tempTasksList.map((task, index) => ({
-        ...task,
-        order: index,
-      }));
-
-      const arrayForServer = newTaskList.map((task) => ({
-        _id: task._id,
-        order: task.order,
-        columnId: columnCard._id,
-      }));
-      changeOrderAndCardOfTask(arrayForServer);
-
-      // setArrayOfTask(newTaskList);
-    }
-  }
-
   return (
-    <div className="board__card" onClick={handleclick}>
+    <div className="board__card" onClick={handleDeleteCardButton}>
       <div className="board__card-header d-flex align-items-center justify-content-between">
         <div className="board__card-title">
           {title} <span className="board__card-count">({arrayOfTask?.length} Tasks)</span>
         </div>
         <FontAwesomeIcon className="prevcard__header-icon card__delete mr-1" icon={faTrash} />
       </div>
-      <div className="board__card-container">
-        {arrayOfTask.map((task) => (
-          <Nav.Link
-            className="board__card-link"
-            key={task._id}
-            as={Link}
-            to="/task"
-            draggable={true}
-            onDragStart={(e) => dragStartHandler(e, task)}
-            onDragOver={(e) => dragOverHandler(e)}
-            onDrop={(e) => dropHandler(e, task, columnCard)}
-          >
-            <PrevTask
-              title={task.title}
-              description={task.description}
-              cardId={cardId}
-              taskId={task._id}
-            />
-          </Nav.Link>
-        ))}
-      </div>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId={cardId}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="board__card-container"
+            >
+              {arrayOfTask.map((task, index) => (
+                <Draggable key={task._id} draggableId={task._id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <PrevTask
+                        title={task.title}
+                        description={task.description}
+                        cardId={cardId}
+                        taskId={task._id}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
       <div
         className="board__card-footer"
         onClick={() => {
-          setisNewTaskModalOpen(true);
+          setIsNewTaskModalOpen(true);
         }}
       >
         <FontAwesomeIcon className="mr-1" icon={faPlus} size="xs" />
@@ -140,7 +155,7 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
           showDescription={true}
           isTask={true}
           isCard={false}
-          arrLength={taskOrder}
+          arrLength={arrayOfTask.length} //!!!
         />
       </ModalWindow>
     </div>

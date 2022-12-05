@@ -15,6 +15,7 @@ import './BoardList.scss';
 export function BoardList() {
   const { isLoading, isError, data: boardsData } = useGetAllBoardsQuery();
   const { changeBoardID } = useActions();
+
   const { languageChoice } = useTypedSelector((state) => state.languageChoice);
 
   const clickHandlerBoard = (boardId: string) => {
