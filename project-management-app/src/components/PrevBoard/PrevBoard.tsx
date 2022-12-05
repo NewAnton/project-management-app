@@ -18,12 +18,19 @@ interface IPrevBoardProps {
 export function PrevBoard({ title, description, boardId }: IPrevBoardProps) {
   const { changeBoardID } = useActions();
   const [isUpdateBoardModalOpen, setUpdateBoardModalOpen] = useState(false);
-  // const [deleteBoard] = useDeleteBoardByIdMutation();
+  const [deleteBoard] = useDeleteBoardByIdMutation();
   const handleEdit = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     changeBoardID(boardId);
     handleOpenUpdateBoardModal();
+  };
+
+  const handleDelete = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    changeBoardID(boardId);
+    deleteBoard(boardId);
   };
 
   const handleOpenUpdateBoardModal = () => {
@@ -63,12 +70,7 @@ export function PrevBoard({ title, description, boardId }: IPrevBoardProps) {
           </div>
           <div className="prevboard__header-description">Edit</div>
         </div>
-        <div
-          className="prevboard__header d-flex align-items-center"
-          onClick={() => {
-            console.log('del');
-          }}
-        >
+        <div className="prevboard__header d-flex align-items-center" onClick={handleDelete}>
           <FontAwesomeIcon className="prevboard__header-icon mr-1" icon={faTrash} />
           <div className="prevboard__header-description">Delete</div>
         </div>
