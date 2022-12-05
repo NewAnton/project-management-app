@@ -41,6 +41,7 @@ export function BoardList() {
               <PrevBoard
                 title={JSON.parse(board.title).title}
                 description={JSON.parse(board.title).description}
+                boardId={board._id}
               />
             </Nav.Link>
           ))}

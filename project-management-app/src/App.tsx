@@ -15,12 +15,24 @@ import { SignIn } from 'pages/SignIn/SignIn';
 import { SignUp } from 'pages/SignUp/SignUp';
 
 import './App.scss';
+import { NewBoard } from 'components/NewBoard/NewBoard';
+import { useGetUserByIdQuery } from 'services/kanbanApiUsers';
+import { decodeToken } from 'react-jwt';
+import { DecodedTokenInterface } from 'types/DecodedTokenInterface';
 
 export function App() {
   const { token } = useTypedSelector((state) => state.globalState);
   const navigate = useNavigate();
 
   const isTokenExpired = useMemo(() => checkIsTokenExpired(token), [token]);
+
+  const { data } = useGetUserByIdQuery((decodeToken(token) as DecodedTokenInterface)?.id || '', {
+    skip: !token,
+  });
+
+  useEffect(() => {
+    localStorage.setItem('login', data?.login || '');
+  }, [data]);
 
   useEffect(() => {
     if (isTokenExpired) navigate('/');
@@ -34,6 +46,7 @@ export function App() {
       <main className="main">
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/new-board" element={<NewBoard />} />
           <Route path="/board-list" element={<BoardList />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/board/:id" element={<Board />} />

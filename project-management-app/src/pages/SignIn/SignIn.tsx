@@ -14,7 +14,11 @@ export function SignIn() {
   const [signInData, setSignInData] = useState({ login: '', password: '' });
   const { setToken } = useActions();
   const { languageChoice } = useTypedSelector((state) => state.languageChoice);
-  const { register, handleSubmit } = useForm<SignInRequest>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInRequest>();
   const { data, isLoading, error, isSuccess, isError } = useAuthSignInQuery(
     { login: signInData.login, password: signInData.password },
     { skip: Boolean(!signInData.login && !signInData.password) }
@@ -69,23 +73,49 @@ export function SignIn() {
           <div className="form-group">
             <label htmlFor="sign-in-form__login-input">{languageChoice ? 'Login' : 'Логин'}</label>
             <input
-              {...register('login', { required: true })}
+              {...register('login', {
+                required: 'This field is required',
+                maxLength: {
+                  value: 15,
+                  message: 'Max length is 15',
+                },
+                minLength: {
+                  value: 2,
+                  message: 'Min length is 2',
+                },
+              })}
               type="text"
               placeholder={'Login...'}
               className="form-control"
               id="sign-in-form__login-input"
             />
           </div>
+          <div style={{ height: '2rem', color: 'red' }}>
+            {errors?.login && <p>{errors?.login?.message}</p>}
+          </div>
           <div className="form-group">
             <label htmlFor="sign-in-form__password-input">
               {languageChoice ? 'Password' : 'Пароль'}
             </label>
             <input
-              {...register('password', { required: true })}
+              {...register('password', {
+                required: 'This field is required',
+                maxLength: {
+                  value: 15,
+                  message: 'Max length is 15',
+                },
+                minLength: {
+                  value: 2,
+                  message: 'Min length is 2',
+                },
+              })}
               type="password"
               className="form-control"
               id="sign-in-form__password-input"
             />
+          </div>
+          <div style={{ height: '2rem', color: 'red' }}>
+            {errors?.password && <p>{errors?.password?.message}</p>}
           </div>
           <button
             type="submit"
