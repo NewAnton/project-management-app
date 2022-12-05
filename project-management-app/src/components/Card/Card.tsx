@@ -85,16 +85,8 @@ export function Card({ title, cardId, columnCard }: ICardProps) {
     if (currentTask) {
       const currentIndex = tempTasksList.indexOf(currentTask);
       tempTasksList.splice(currentIndex, 1);
-      if (currentCard?._id === columnCard._id) {
-        const dropIndex = tempTasksList.indexOf(taskCard);
-        tempTasksList.splice(dropIndex, 0, currentTask);
-        console.log(currentTask);
-        console.log(tempTasksList);
-      } else {
-        tempTasksList.push(currentTask);
-        console.log(currentTask);
-        console.log(tempTasksList);
-      }
+      const dropIndex = tempTasksList.indexOf(taskCard);
+      tempTasksList.splice(dropIndex, 0, currentTask);
       const newTaskList = tempTasksList.map((task, index) => ({
         ...task,
         order: index,
