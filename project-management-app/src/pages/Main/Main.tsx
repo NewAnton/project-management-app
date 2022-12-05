@@ -6,13 +6,15 @@ import kanban from '../../assets/kanban.png';
 import alexej from '../../assets/Alexej.jpg';
 import anton from '../../assets/Anton.jpg';
 import vadim from '../../assets/Vadzim.jpg';
+import { useTypedSelector } from 'hooks/useTypedSelector';
 
 import './Main.scss';
 
 export function Main() {
+  const { languageChoice } = useTypedSelector((state) => state.languageChoice);
   return (
     <Container>
-      <h2 className="main__title">Main Page</h2>
+      <h2 className="main__title">{languageChoice ? 'Main Page' : 'Главная Страница'}</h2>
       <section className="card p-4 mb-5">
         <div className="row">
           <div className="col-md-7 mb-3">
@@ -20,23 +22,26 @@ export function Main() {
           </div>
           <div className="col-md-5" style={{ color: 'var(--header-dark-bg)' }}>
             <h2 className="card-title main-title mb-4 mt-5">
-              Kanban board for teams to organize their work
+              {languageChoice
+                ? 'Kanban board for teams to organize their work'
+                : 'Канбан-доска для командной работы'}
             </h2>
             <h5 className="card-text">
-              It is a project management software that allows you to centrally manage tasks and
-              their timely completion. Trackers are widely used in project management, because they
-              allow you to easily monitor all work processes and control the work of the team
+              {languageChoice
+                ? 'It is a project management software that allows you to centrally manage tasks and their timely completion. Trackers are widely used in project management, because they allow you to easily monitor all work processes and control the work of the team'
+                : 'Это программа для управления проектами, которая позволяет централизованно руководить задачами и их своевременным выполнением. Трекеры широко используются в проектном менеджменте, потому что позволяют без труда следить за всеми рабочими процессами и контролировать работу команды'}
             </h5>
             <h5 className="card-text">
-              Collaborate, manage projects, and reach new productivity peaks. Accomplish it all with
-              RS Project Management App
+              {languageChoice
+                ? 'Collaborate manage projects and reach new productivity peaks. Accomplish it all with RS Project Management App'
+                : 'Управляйте проектами и командами, достигайте новых вершин продуктивности с помощью RS Project Management App'}
             </h5>
           </div>
         </div>
       </section>
       <section className="team-boxed">
         <div className="intro">
-          <h2 className="main__title">Our team </h2>
+          <h2 className="main__title">{languageChoice ? 'Our team' : 'Наша команда'}</h2>
         </div>
         <div className="row people">
           <div className="col-md-6 col-lg-4 item">
@@ -47,9 +52,9 @@ export function Main() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <h4 className="name">Alexej Ilyutik</h4>
+                <h4 className="name">{languageChoice ? 'Alexej Ilyutik' : 'Алексей Ильютик'}</h4>
               </a>
-              <p className="title">Frontend developer</p>
+              <p className="title">Frontend {languageChoice ? 'developer' : 'разработчик'}</p>
               <div className="social">
                 <a
                   href="https://www.linkedin.com/in/alexej-ilyutik/"
@@ -72,9 +77,9 @@ export function Main() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <h4 className="name">Anton Korobov</h4>
+                <h4 className="name">{languageChoice ? 'Anton Korobov' : 'Антон Коробов'}</h4>
               </a>
-              <p className="title">Frontend developer</p>
+              <p className="title">Frontend {languageChoice ? 'developer' : 'разработчик'}</p>
               <div className="social">
                 <a
                   href="http://www.linkedin.com/in/%D0%B0%D0%BD%D1%82%D0%BE%D0%BD-%D0%BA%D0%BE%D1%80%D0%BE%D0%B1%D0%BE%D0%B2-a2a619221"
@@ -93,9 +98,9 @@ export function Main() {
             <div className="box">
               <img className="rounded border border-light" src={vadim} alt="ava" />
               <a href="https://ej252.github.io/rsschool-cv/" target="_blank" rel="noreferrer">
-                <h4 className="name">Vadzim Embala</h4>
+                <h4 className="name">{languageChoice ? 'Vadzim Embala' : 'Вадим Ембала'}</h4>
               </a>
-              <p className="title">Frontend developer</p>
+              <p className="title">Frontend {languageChoice ? 'developer' : 'разработчик'}</p>
               <div className="social">
                 <a
                   href="https://www.linkedin.com/in/vadzim-embala-65021b200/"
