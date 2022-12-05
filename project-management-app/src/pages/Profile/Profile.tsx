@@ -17,7 +17,11 @@ export function Profile() {
     login: string;
     password: string;
   }
-  const { register, handleSubmit } = useForm<updateUserInfo>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<updateUserInfo>();
   const [updateUserInfo, getNewUserInfo] = useUpdateUserByIdMutation();
   const { token } = useTypedSelector((state) => state.globalState);
   const { languageChoice } = useTypedSelector((state) => state.languageChoice);
@@ -69,7 +73,17 @@ export function Profile() {
           <div className="form-group">
             <label htmlFor="profile-form__name-input">{languageChoice ? 'Name' : 'Имя'}</label>
             <input
-              {...register('name', { required: true })}
+              {...register('name', {
+                required: 'This field is required',
+                maxLength: {
+                  value: 15,
+                  message: 'Max length is 15',
+                },
+                minLength: {
+                  value: 2,
+                  message: 'Min length is 2',
+                },
+              })}
               type="text"
               placeholder={'Name...'}
               className="form-control"
@@ -80,26 +94,55 @@ export function Profile() {
           We&apos;ll never share your email with anyone else.
         </small> */}
           </div>
+          <div style={{ height: '2rem', color: 'red' }}>
+            {errors?.name && <p>{errors?.name?.message}</p>}
+          </div>
           <div className="form-group">
             <label htmlFor="profile-form__login-input">{languageChoice ? 'Login' : 'Логин'}</label>
             <input
-              {...register('login', { required: true })}
+              {...register('login', {
+                required: 'This field is required',
+                maxLength: {
+                  value: 15,
+                  message: 'Max length is 15',
+                },
+                minLength: {
+                  value: 2,
+                  message: 'Min length is 2',
+                },
+              })}
               type="text"
               placeholder={'Login...'}
               className="form-control"
               id="profile-form__login-input"
             />
           </div>
+          <div style={{ height: '2rem', color: 'red' }}>
+            {errors?.login && <p>{errors?.login?.message}</p>}
+          </div>
           <div className="form-group">
             <label htmlFor="profile-form__password-input">
               {languageChoice ? 'Password' : 'Пароль'}
             </label>
             <input
-              {...register('password', { required: true })}
+              {...register('password', {
+                required: 'This field is required',
+                maxLength: {
+                  value: 15,
+                  message: 'Max length is 15',
+                },
+                minLength: {
+                  value: 2,
+                  message: 'Min length is 2',
+                },
+              })}
               type="password"
               className="form-control"
               id="profile-form__password-input"
             />
+          </div>
+          <div style={{ height: '2rem', color: 'red' }}>
+            {errors?.password && <p>{errors?.password?.message}</p>}
           </div>
           <div className="form-group form-check">
             <input type="checkbox" className="form-check-input" id="profile-form__check1" />
