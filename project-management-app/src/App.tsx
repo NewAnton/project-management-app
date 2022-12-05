@@ -15,6 +15,7 @@ import { SignIn } from 'pages/SignIn/SignIn';
 import { SignUp } from 'pages/SignUp/SignUp';
 
 import './App.scss';
+import { NewBoard } from 'components/NewBoard/NewBoard';
 
 export function App() {
   const { boardID } = useTypedSelector((state) => state.boardID);
@@ -35,6 +36,7 @@ export function App() {
       <main className="main">
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/new-board" element={<NewBoard />} />
           <Route path="/board-list" element={<BoardList />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/board" element={<Board boardId={boardID} />} />
